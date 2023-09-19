@@ -1,0 +1,13 @@
+BasedOnStyle: LLVM
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Empty
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBraces: Linux
+BreakConstructorInitializers: AfterColon
+ConstructorInitializerIndentWidth: 2
+IndentAccessModifiers: true
+IndentCaseLabels: true
+MaxEmptyLinesToKeep: 2
+NamespaceIndentation: All
+PackConstructorInitializers: Never
+SpaceBeforeCpp11BracedList: true

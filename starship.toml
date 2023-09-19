@@ -1,0 +1,29 @@
+# Disable the blank line at the start of the prompt.
+add_newline = false
+
+# Default Prompt Format.
+format = "$directory$git_branch$git_status$character"
+
+# Set Sonokai as custom color palette.
+palette = "sonokai"
+
+[directory]
+style = "bold blue"
+
+[git_branch]
+format = "[$symbol$branch(:$remote_branch)]($style) "
+style = "foreground"
+
+[git_status]
+style = "red"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+
+# Define Sonokai color palette.
+[palettes.sonokai]
+foreground = "#e2e2e3"
+red = "#fc5d7c"
+blue = "#76cce0"
+green = "#9ed072"

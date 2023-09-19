@@ -1,0 +1,5 @@
+#!/bin/bash
+
+currentDate=$(date +"%Y-%m-%d %T")
+readonly currentDate
+echo "flashcards backup: $currentDate" > "$1"
