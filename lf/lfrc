@@ -8,3 +8,6 @@ map . set hidden!
 
 # Run shell command.
 map ':!' shell
+
+# Set file previewer.
+set previewer ~/.config/lf/file_previewer.sh
