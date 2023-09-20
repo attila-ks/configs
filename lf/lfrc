@@ -1,0 +1,11 @@
+set icons
+set number
+set relativenumber
+set ignorecase
+set shell fish
+
+# Toggle hidden files.
+map . set hidden!
+
+# Run shell command.
+map ':!' shell
