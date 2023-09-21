@@ -1,6 +1,7 @@
 set icons
 set number
 set relativenumber
+set numberfmt "\033[38;2;89;95;111m"
 set ignorecase
 
 # Toggle hidden files.
