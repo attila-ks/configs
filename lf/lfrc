@@ -12,3 +12,6 @@ map ':!' shell
 
 # Set file previewer.
 set previewer ~/.config/lf/file_previewer.sh
+
+# Integrate trash-cli.
+cmd DD %trash-put $fx
