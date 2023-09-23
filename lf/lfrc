@@ -15,3 +15,18 @@ set previewer ~/.config/lf/file_previewer.sh
 
 # Integrate trash-cli.
 cmd DD %trash-put $fx
+
+
+# Integrate zoxide.
+
+# Jumpt to a directory.
+cmd j %{{
+  result="$(zoxide query --exclude $PWD $@ | sed 's/\\/\\\\/g;s/"/\\"/g')"
+  lf -remote "send $id cd \"$result\""
+}}
+
+# cd with interactive selection (using fzf).
+cmd ji ${{
+  result="$(zoxide query -i | sed 's/\\/\\\\/g;s/"/\\"/g')"
+  lf -remote "send $id cd \"$result\""
+}}
