@@ -19,6 +19,8 @@
           <string>#e2e2e3</string>
           <key>background</key>
           <string>#2c2e34</string>
+          <key>gutterForeground</key>
+          <string>#595f6f</string>
           <key>invisibles</key>
           <string>#7f8490</string>
         </dict>
