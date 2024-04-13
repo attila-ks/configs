@@ -82,7 +82,7 @@ function install_lf_file_manager() {
 		;;
 	esac
 
-	ln -s ./lf /home/$USER/.config/
+	ln -s $(pwd)/lf /home/$USER/.config/
 }
 
 function install_bat() {
@@ -94,7 +94,7 @@ function install_bat() {
 		;;
 	esac
 
-	ln -s ./bat /home/$USER/.config/
+	ln -s $(pwd)/bat /home/$USER/.config/
 	bat cache --build
 }
 
@@ -125,7 +125,7 @@ function install_tmux() {
 		;;
 	esac
 
-	ln -s ./tmux/.tmux.conf /home/$USER/
+	ln -s $(pwd)/tmux/.tmux.conf /home/$USER/
 
 	if [ ! -d "/home/$USER/.config/tmux/plugins" ]; then
 		mkdir -p /home/$USER/.config/tmux/plugins
@@ -144,7 +144,7 @@ function install_starship_prompt() {
 		;;
 	esac
 
-	ln -s ./starship.toml /home/$USER/.config/
+	ln -s $(pwd)/starship.toml /home/$USER/.config/
 }
 
 function install_fzf() {
@@ -182,8 +182,8 @@ function install_fish_shell() {
 		trash-put /home/$USER/.config/fish/config.fish
 	fi
 
-	ln -s ./fish/config.fish /home/$USER/.config/fish/
-	ln -s ./fish/themes /home/$USER/.config/fish/
+	ln -s $(pwd)/fish/config.fish /home/$USER/.config/fish/
+	ln -s $(pwd)/fish/themes /home/$USER/.config/fish/
 	# Sets the Fish shell as the default shell.
 	sudo chsh -s /usr/bin/fish
 }
@@ -222,7 +222,7 @@ function install_alacritty() {
 		mkdir /home/$USER/.config/alacritty
 	fi
 
-	ln -s ./alacritty/alacritty.toml /home/$USER/.config/alacritty/
+	ln -s $(pwd)/alacritty/alacritty.toml /home/$USER/.config/alacritty/
 	mkdir /home/$USER/.config/alacritty/themes
 	cd /home/$USER/.config/alacritty/themes
 	curl -LO https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
