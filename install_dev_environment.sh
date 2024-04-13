@@ -41,16 +41,6 @@ function install_gcc() {
 	esac
 }
 
-function install_clang_tools_extra() {
-	echo -e "\n${GREEN}Installing clang-tools-extra...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y clang-tools-extra
-		;;
-	esac
-}
-
 function install_meson() {
 	echo -e "\n${GREEN}Installing Meson...${NO_COLOR}"
 
@@ -240,7 +230,6 @@ function install_alacritty() {
 
 detect_installed_package_manager
 install_git
-install_clang_tools_extra
 install_meson
 install_fish_shell
 install_font
