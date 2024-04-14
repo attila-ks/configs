@@ -71,6 +71,16 @@ function install_fd() {
 	esac
 }
 
+function install_npm() {
+	echo -e "\n${GREEN}Installing npm...${NO_COLOR}"
+
+	case $package_manager in
+	dnf | zypper)
+		sudo $package_manager install -y npm
+		;;
+	esac
+}
+
 USER=$(whoami)
 
 function install_lf_file_manager() {
@@ -103,6 +113,7 @@ function install_neovim() {
 	install_gcc
 	install_ripgrep
 	install_fd
+	install_npm
 
 	echo -e "\n${GREEN}Installing Neovim...${NO_COLOR}"
 
