@@ -82,7 +82,7 @@ function install_lf_file_manager() {
 		;;
 	esac
 
-	ln -s $(pwd)/lf /home/$USER/.config/
+	ln -s "$(pwd)"/lf /home/"$USER"/.config/
 }
 
 function install_bat() {
@@ -94,7 +94,7 @@ function install_bat() {
 		;;
 	esac
 
-	ln -s $(pwd)/bat /home/$USER/.config/
+	ln -s "$(pwd)"/bat /home/"$USER"/.config/
 	bat cache --build
 }
 
@@ -112,7 +112,7 @@ function install_neovim() {
 		;;
 	esac
 
-	git clone https://github.com/attila-ks/nvim.git /home/$USER/.config
+	git clone https://github.com/attila-ks/nvim.git /home/"$USER"/.config
 }
 
 function install_tmux() {
@@ -124,13 +124,13 @@ function install_tmux() {
 		;;
 	esac
 
-	ln -s $(pwd)/tmux/.tmux.conf /home/$USER/
+	ln -s "$(pwd)"/tmux/.tmux.conf /home/"$USER"/
 
 	if [ ! -d "/home/$USER/.config/tmux/plugins" ]; then
-		mkdir -p /home/$USER/.config/tmux/plugins
+		mkdir -p /home/"$USER"/.config/tmux/plugins
 	fi
 
-	git clone https://github.com/catppuccin/tmux.git /home/$USER/.config/tmux/plugins/catppuccin
+	git clone https://github.com/catppuccin/tmux.git /home/"$USER"/.config/tmux/plugins/catppuccin
 }
 
 function install_starship_prompt() {
@@ -142,7 +142,7 @@ function install_starship_prompt() {
 		;;
 	esac
 
-	ln -s $(pwd)/starship.toml /home/$USER/.config/
+	ln -s "$(pwd)"/starship.toml /home/"$USER"/.config/
 }
 
 function install_fzf() {
@@ -176,12 +176,12 @@ function install_fish_shell() {
 		;;
 	esac
 
-	if [ -e /home/$USER/.config/fish/config.fish ]; then
-		trash-put /home/$USER/.config/fish/config.fish
+	if [ -e /home/"$USER"/.config/fish/config.fish ]; then
+		trash-put /home/"$USER"/.config/fish/config.fish
 	fi
 
-	ln -s $(pwd)/fish/config.fish /home/$USER/.config/fish/
-	ln -s $(pwd)/fish/themes /home/$USER/.config/fish/
+	ln -s "$(pwd)"/fish/config.fish /home/"$USER"/.config/fish/
+	ln -s "$(pwd)"/fish/themes /home/"$USER"/.config/fish/
 	# Sets the Fish shell as the default shell.
 	sudo chsh -s /usr/bin/fish
 }
@@ -199,11 +199,11 @@ function install_zoxide() {
 function install_font() {
 	echo -e "\n${GREEN}Installing JetBrainsMono font...${NO_COLOR}"
 
-	if [ ! -d /home/$USER/.fonts ]; then
-		mkdir /home/$USER/.fonts
+	if [ ! -d /home/"$USER"/.fonts ]; then
+		mkdir /home/"$USER"/.fonts
 	fi
 
-	cd /home/$USER/.fonts
+	cd /home/"$USER"/.fonts
 	curl -LO https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFont-Regular.ttf
 	cd -
 }
@@ -217,13 +217,13 @@ function install_alacritty() {
 		;;
 	esac
 
-	if [ ! -d /home/$USER/.config/alacritty ]; then
-		mkdir /home/$USER/.config/alacritty
+	if [ ! -d /home/"$USER"/.config/alacritty ]; then
+		mkdir /home/"$USER"/.config/alacritty
 	fi
 
-	ln -s $(pwd)/alacritty/alacritty.toml /home/$USER/.config/alacritty/
-	mkdir /home/$USER/.config/alacritty/themes
-	cd /home/$USER/.config/alacritty/themes
+	ln -s "$(pwd)"/alacritty/alacritty.toml /home/"$USER"/.config/alacritty/
+	mkdir /home/"$USER"/.config/alacritty/themes
+	cd /home/"$USER"/.config/alacritty/themes
 	curl -LO https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
 	cd -
 }
