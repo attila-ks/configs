@@ -112,8 +112,7 @@ function install_neovim() {
 		;;
 	esac
 
-	cd /home/$USER/.config
-	git clone https://github.com/attila-ks/nvim.git
+	git clone https://github.com/attila-ks/nvim.git /home/$USER/.config
 }
 
 function install_tmux() {
@@ -131,8 +130,7 @@ function install_tmux() {
 		mkdir -p /home/$USER/.config/tmux/plugins
 	fi
 
-	cd /home/$USER/.config/tmux/plugins
-	git clone https://github.com/catppuccin/tmux.git catppuccin
+	git clone https://github.com/catppuccin/tmux.git /home/$USER/.config/tmux/plugins/catppuccin
 }
 
 function install_starship_prompt() {
@@ -207,6 +205,7 @@ function install_font() {
 
 	cd /home/$USER/.fonts
 	curl -LO https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFont-Regular.ttf
+	cd -
 }
 
 function install_alacritty() {
@@ -226,6 +225,7 @@ function install_alacritty() {
 	mkdir /home/$USER/.config/alacritty/themes
 	cd /home/$USER/.config/alacritty/themes
 	curl -LO https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
+	cd -
 }
 
 detect_installed_package_manager
