@@ -71,6 +71,7 @@ function install_fd() {
 	esac
 }
 
+# Required by mason.nvim plugin to install the bash-language-server.
 function install_npm() {
 	echo -e "\n${GREEN}Installing npm...${NO_COLOR}"
 
