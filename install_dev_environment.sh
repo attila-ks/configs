@@ -240,6 +240,19 @@ function install_alacritty() {
 	cd -
 }
 
+function install_tealdeer() {
+	echo -e "\n${GREEN}Installing tealdeer...${NO_COLOR}"
+
+	case $package_manager in
+	dnf | zypper)
+		sudo $package_manager install -y tealdeer
+		;;
+	esac
+
+	echo -e "\n${GREEN}Updating tealdeer cache...${NO_COLOR}"
+	tldr --update
+}
+
 detect_installed_package_manager
 install_git
 install_meson
@@ -254,3 +267,4 @@ install_fzf
 install_trash_cli
 install_neovim
 install_alacritty
+install_tealdeer
