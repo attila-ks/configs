@@ -221,38 +221,6 @@ function install_zoxide() {
 	esac
 }
 
-function install_font() {
-	echo -e "\n${GREEN}Installing JetBrainsMono font...${NO_COLOR}"
-
-	if [ ! -d /home/"$USER"/.fonts ]; then
-		mkdir /home/"$USER"/.fonts
-	fi
-
-	cd /home/"$USER"/.fonts
-	curl -LO https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFont-Regular.ttf
-	cd -
-}
-
-function install_alacritty() {
-	echo -e "\n${GREEN}Installing Alacritty...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y alacritty
-		;;
-	esac
-
-	if [ ! -d /home/"$USER"/.config/alacritty ]; then
-		mkdir /home/"$USER"/.config/alacritty
-	fi
-
-	ln -s "$(pwd)"/alacritty/alacritty.toml /home/"$USER"/.config/alacritty/
-	mkdir /home/"$USER"/.config/alacritty/themes
-	cd /home/"$USER"/.config/alacritty/themes
-	curl -LO https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml
-	cd -
-}
-
 function install_tealdeer() {
 	echo -e "\n${GREEN}Installing tealdeer...${NO_COLOR}"
 
@@ -270,7 +238,6 @@ detect_installed_package_manager
 install_git
 install_meson
 install_fish_shell
-install_font
 install_lf_file_manager
 install_bat
 install_zoxide
@@ -279,5 +246,4 @@ install_starship_prompt
 install_fzf
 install_trash_cli
 install_helix_editor
-install_alacritty
 install_tealdeer
