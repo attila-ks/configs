@@ -106,6 +106,7 @@ function install_bat() {
 	esac
 
 	ln -s "$(pwd)"/bat /home/"$USER"/.config/
+	# TODO: Use `curl` to download `catppuccin-mocha` theme
 	bat cache --build
 }
 
@@ -193,6 +194,7 @@ function install_fish_shell() {
 	fi
 
 	ln -s "$(pwd)"/fish/config.fish /home/"$USER"/.config/fish/
+	# TODO: Use `curl` to download the `catppuccin-mocha` theme
 	ln -s "$(pwd)"/fish/themes /home/"$USER"/.config/fish/
 	# Sets the Fish shell as the default shell.
 	sudo chsh -s /usr/bin/fish
