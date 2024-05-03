@@ -31,16 +31,6 @@ function install_git() {
 	esac
 }
 
-function install_gcc() {
-	echo -e "\n${GREEN}Installing gcc...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y gcc
-		;;
-	esac
-}
-
 function install_meson() {
 	echo -e "\n${GREEN}Installing Meson...${NO_COLOR}"
 
@@ -71,7 +61,6 @@ function install_fd() {
 	esac
 }
 
-# Required by mason.nvim plugin to install the bash-language-server.
 function install_npm() {
 	echo -e "\n${GREEN}Installing npm...${NO_COLOR}"
 
@@ -110,22 +99,44 @@ function install_bat() {
 	bat cache --build
 }
 
-function install_neovim() {
-	echo -e "\n${GREEN}Installing Neovim dependencies...${NO_COLOR}"
-	install_gcc
-	install_ripgrep
-	install_fd
-	install_npm
-
-	echo -e "\n${GREEN}Installing Neovim...${NO_COLOR}"
+function install_cpp_tools() {
+	echo -e "\n${GREEN}Installing C++ tools (clangd, clang-format, codelldb)...${NO_COLOR}"
+	# TODO: Install codelldb.
 
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y neovim
+		sudo $package_manager install -y clang-tools-extra
+		;;
+	esac
+}
+
+function install_meson_lsp() {
+	echo -e "\n${GREEN}Installing Meson LSP...${NO_COLOR}"
+	# Helix currently has no built-in support for Meson.
+}
+
+function install_bash_lsp() {
+	echo -e "\n${GREEN}Installing Bash LSP...${NO_COLOR}"
+	install_npm
+
+	sudo npm install -g bash-language-server
+}
+
+function install_helix_editor() {
+	echo -e "\n${GREEN}Installing language tools for Helix editor...${NO_COLOR}"
+	install_clangd_lsp
+	install_meson_lsp
+	install_bash_lsp
+
+	echo -e "\n${GREEN}Installing Helix editor...${NO_COLOR}"
+
+	case $package_manager in
+	dnf | zypper)
+		sudo $package_manager install -y helix
 		;;
 	esac
 
-	git clone https://github.com/attila-ks/nvim.git /home/"$USER"/.config
+	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
 }
 
 function install_tmux() {
@@ -267,6 +278,6 @@ install_tmux
 install_starship_prompt
 install_fzf
 install_trash_cli
-install_neovim
+install_helix_editor
 install_alacritty
 install_tealdeer
