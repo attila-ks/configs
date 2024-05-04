@@ -124,7 +124,7 @@ function install_bash_lsp() {
 
 function install_helix_editor() {
 	echo -e "\n${GREEN}Installing language tools for Helix editor...${NO_COLOR}"
-	install_clangd_lsp
+	install_cpp_tools
 	install_meson_lsp
 	install_bash_lsp
 
