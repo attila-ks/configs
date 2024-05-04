@@ -1,7 +1,6 @@
 [[language]]
 name = "cpp"
-
-# TODO: Add clang-format.
+formatter = { command = "clang-format" }
 
 [language.debugger]
 name = "lldb-vscode"
