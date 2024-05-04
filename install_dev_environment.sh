@@ -101,13 +101,15 @@ function install_bat() {
 
 function install_cpp_tools() {
 	echo -e "\n${GREEN}Installing C++ tools (clangd, clang-format, codelldb)...${NO_COLOR}"
-	# TODO: Install codelldb.
 
 	case $package_manager in
 	dnf | zypper)
 		sudo $package_manager install -y clang-tools-extra
 		;;
 	esac
+
+	# `lldb-vscode` has been renamed to `lldb-dap`, but Helix editor looks for the former.
+	ln -s /usr/bin/lldb-dap /usr/bin/lldb-vscode
 }
 
 function install_meson_lsp() {
