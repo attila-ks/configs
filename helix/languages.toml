@@ -2,6 +2,9 @@
 name = "cpp"
 formatter = { command = "clang-format" }
 
+[language-server.clangd]
+args = [ "--compile-commands-dir=./build" ]
+
 [language.debugger]
 name = "lldb-vscode"
 transport = "stdio"
