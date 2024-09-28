@@ -11,5 +11,3 @@ normal = { family = "JetBrainsMonoNL Nerd Font", style = "Regular" }
 [cursor]
 style = { shape = "Block", blinking = "On" }
 
-[env]
-term = "alacritty-direct"
