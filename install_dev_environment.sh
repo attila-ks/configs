@@ -41,52 +41,22 @@ function install_meson() {
 	esac
 }
 
-function install_ripgrep() {
-	echo -e "\n${GREEN}Installing ripgrep (an alternative to 'grep')...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y ripgrep
-		;;
-	esac
-}
-
-function install_fd() {
-	echo -e "\n${GREEN}Installing fd (an alternative to 'find')...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y fd
-		;;
-	esac
-}
-
-function install_npm() {
-	echo -e "\n${GREEN}Installing npm...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y npm
-		;;
-	esac
-}
-
 USER=$(whoami)
 
-function install_lf_file_manager() {
-	echo -e "\n${GREEN}Installing lf file manager...${NO_COLOR}"
+function install_yazi_file_manager() {
+	echo -e "\n${GREEN}Installing Yazi file manager...${NO_COLOR}"
 
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y lf
+		sudo $package_manager install -y yazi
 		;;
 	esac
 
-	ln -s "$(pwd)"/lf /home/"$USER"/.config/
+  ln -s "$(pwd)"/yazi/yazi.toml /home/"$USER"/.config/yazi/
 }
 
 function install_bat() {
-	echo -e "\n${GREEN}Install bat (an alternative to 'cat')...${NO_COLOR}"
+	echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
 
 	case $package_manager in
 	dnf | zypper)
@@ -95,50 +65,23 @@ function install_bat() {
 	esac
 
 	ln -s "$(pwd)"/bat /home/"$USER"/.config/
-	# TODO: Use `curl` to download `catppuccin-mocha` theme
 	bat cache --build
 }
 
-function install_cpp_tools() {
-	echo -e "\n${GREEN}Installing C++ tools (clangd, clang-format, codelldb)...${NO_COLOR}"
+function install_vim_editor() {
+	echo -e "\n${GREEN}Installing Vim editor...${NO_COLOR}"
 
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y clang-tools-extra
+		sudo $package_manager install -y vim
 		;;
 	esac
 
-	# `lldb-vscode` has been renamed to `lldb-dap`, but Helix editor looks for the former.
-	ln -s /usr/bin/lldb-dap /usr/bin/lldb-vscode
-}
-
-function install_meson_lsp() {
-	echo -e "\n${GREEN}Installing Meson LSP...${NO_COLOR}"
-	# Helix currently has no built-in support for Meson.
-}
-
-function install_bash_lsp() {
-	echo -e "\n${GREEN}Installing Bash LSP...${NO_COLOR}"
-	install_npm
-
-	sudo npm install -g bash-language-server
-}
-
-function install_helix_editor() {
-	echo -e "\n${GREEN}Installing language tools for Helix editor...${NO_COLOR}"
-	install_cpp_tools
-	install_meson_lsp
-	install_bash_lsp
-
-	echo -e "\n${GREEN}Installing Helix editor...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y helix
-		;;
-	esac
-
-	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
+	ln -s "$(pwd)"/.vimrc /home/"$USER"/
+	# Installs plugin manager for Vim.
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  # For the IdeaVim plugin of CLion.
+  ln -s "$(pwd)"/.ideavimrc /home/"$USER"/
 }
 
 function install_tmux() {
@@ -207,8 +150,9 @@ function install_fish_shell() {
 	fi
 
 	ln -s "$(pwd)"/fish/config.fish /home/"$USER"/.config/fish/
-	# TODO: Use `curl` to download the `catppuccin-mocha` theme
 	ln -s "$(pwd)"/fish/themes /home/"$USER"/.config/fish/
+	# Disables fish's welcome message.
+	set -U fish_greeting
 	# Sets the Fish shell as the default shell.
 	sudo chsh -s /usr/bin/fish
 }
@@ -271,15 +215,15 @@ function install_tealdeer() {
 detect_installed_package_manager
 install_git
 install_meson
-install_fish_shell
 install_font
-install_lf_file_manager
+install_yazi_file_manager
 install_bat
 install_zoxide
 install_tmux
 install_starship_prompt
 install_fzf
 install_trash_cli
-install_helix_editor
+install_vim_editor
 install_alacritty
 install_tealdeer
+install_fish_shell
