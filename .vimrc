@@ -11,6 +11,8 @@ set ignorecase
 set smartcase
 " Enable true color support.
 set termguicolors
+" Sets the fillchars to space.
+set fillchars+=eob:\ 
 
 " Move line(s) down in visual mode.
 vnoremap J :m '>+1<CR>gv=gv
@@ -30,7 +32,7 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-commentary'
 " Allow to jump to any positions in the visible editor area.
 Plug 'justinmk/vim-sneak' " TODO: Try to make it behave like the neovim plugin called leap!
-" Delete, change, add parentheses, quotes, XML-tags with ease.
+" Delete, change, add parentheses, quotes, XML-tags wiars+=eob:\ rs+=eob:\ h ease.
 Plug 'tpope/vim-surround'
 
 Plug 'terryma/vim-multiple-cursors'
