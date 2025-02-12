@@ -18,3 +18,4 @@ abbr --add yz yazi
 alias cat="bat"
 
 fish_add_path /home/"$USER"/.local/bin
+fish_add_path /home/"$USER"/.cargo/bin

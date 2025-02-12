@@ -242,6 +242,18 @@ function install_fish_lsp() {
 
 	fish-lsp complete > ~/.config/fish/completions/fish-lsp.fish
 }
+
+function install_search_and_replace_tool() {
+	echo -e "\n${GREEN}Installing Serpl (search and replace tool)...${NO_COLOR}"
+
+	case $package_manager in
+	dnf | zypper)
+		sudo $package_manager install -y ripgrep
+		;;
+	esac
+
+	cargo install serpl
+}
  
 detect_installed_package_manager
 install_git
@@ -262,3 +274,4 @@ install_helix_editor
 install_python_lsp
 install_bash_lsp
 install_fish_lsp
+install_search_and_replace_tool
