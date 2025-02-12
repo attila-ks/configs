@@ -29,6 +29,9 @@ function install_git() {
 		sudo $package_manager install -y git
 		;;
 	esac
+  
+	# FIXME: The following command fails because .gitconfig is added to .gitignore
+  ln -s "$(pwd)"/git/.gitconfig "$HOME"/
 }
 
 function install_meson() {
