@@ -42,8 +42,6 @@ function install_meson() {
 	sudo dnf install mesonlsp
 }
 
-USER=$(whoami)
-
 function install_yazi_file_manager() {
 	echo -e "\n${GREEN}Installing Yazi file manager...${NO_COLOR}"
 
