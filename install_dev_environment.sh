@@ -34,11 +34,9 @@ function install_git() {
 function install_meson() {
 	echo -e "\n${GREEN}Installing Meson...${NO_COLOR}"
 
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y meson
-		;;
-	esac
+	sudo dnf install -y meson
+	sudo dnf copr enable jcwasmx86/Swift-MesonLSP
+	sudo dnf install mesonlsp
 }
 
 USER=$(whoami)
@@ -68,20 +66,17 @@ function install_bat() {
 	bat cache --build
 }
 
-function install_vim_editor() {
-	echo -e "\n${GREEN}Installing Vim editor...${NO_COLOR}"
+function install_helix_editor() {
+	echo -e "\n${GREEN}Installing Helix editor...${NO_COLOR}"
 
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y vim
+		sudo $package_manager install -y helix
 		;;
 	esac
 
-	ln -s "$(pwd)"/.vimrc /home/"$USER"/
-	# Installs plugin manager for Vim.
-  curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  # For the IdeaVim plugin of CLion.
-  ln -s "$(pwd)"/.ideavimrc /home/"$USER"/
+	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
+	ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
 }
 
 function install_tmux() {
@@ -212,6 +207,41 @@ function install_tealdeer() {
 	tldr --update
 }
 
+function install_glow() {
+	echo -e "\n${GREEN}Installing Glow markdown reader...${NO_COLOR}"
+
+	case $package_manager in
+	dnf | zypper)
+		sudo $package_manager install -y glow
+		;;
+	esac
+}
+
+function install_python_lsp() {
+	echo -e "\n${GREEN}Installing ruff Python LSP...${NO_COLOR}"
+	pip install ruff
+}
+
+function install_bash_lsp() {
+	echo -e "\n${GREEN}Installing Bash LSP...${NO_COLOR}"
+
+	case $package_manager in
+	dnf | zypper)
+		sudo $package_manager install -y shellcheck
+		sudo $package_manager install -y npm
+		;;
+	esac
+
+	sudo npm install -g bash-language-server
+}
+
+function install_fish_lsp() {
+	echo -e "\n${GREEN}Installing Fish LSP...${NO_COLOR}"
+	sudo npm install -g fish-lsp
+
+	fish-lsp complete > ~/.config/fish/completions/fish-lsp.fish
+}
+ 
 detect_installed_package_manager
 install_git
 install_meson
@@ -223,7 +253,11 @@ install_tmux
 install_starship_prompt
 install_fzf
 install_trash_cli
-install_vim_editor
 install_alacritty
 install_tealdeer
 install_fish_shell
+install_glow
+install_helix_editor
+install_python_lsp
+install_bash_lsp
+install_fish_lsp

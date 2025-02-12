@@ -1,4 +1,4 @@
-# Set the theme
+# Sets the theme
 general.import = ["~/.config/alacritty/themes/catppuccin-mocha.toml"]
 
 [window]
@@ -10,3 +10,6 @@ normal = { family = "JetBrainsMonoNL Nerd Font", style = "Regular" }
 
 [cursor]
 style = { shape = "Block", blinking = "On" }
+
+[env]
+term = "alacritty-direct"
