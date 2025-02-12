@@ -35,7 +35,7 @@ function install_git() {
 }
 
 function install_meson() {
-	echo -e "\n${GREEN}Installing Meson...${NO_COLOR}"
+	echo -e "\n${GREEN}Installing Meson build system...${NO_COLOR}"
 
 	sudo dnf install -y meson
 	sudo dnf copr enable jcwasmx86/Swift-MesonLSP
