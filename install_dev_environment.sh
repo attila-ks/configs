@@ -38,6 +38,39 @@ function install_git() {
 	ln -s "$(pwd)"/git/.gitconfig "$HOME"/
 }
 
+function install_meson() {
+	echo -e "\n${GREEN}Installing Meson build system...${NO_COLOR}"
+
+	sudo dnf install -y meson
+	sudo dnf copr enable jcwasmx86/Swift-MesonLSP
+	sudo dnf install mesonlsp
+}
+
+function install_yazi_file_manager() {
+	echo -e "\n${GREEN}Installing Yazi file manager...${NO_COLOR}"
+
+	case $package_manager in
+	dnf | zypper)
+		sudo $package_manager install -y yazi
+		;;
+	esac
+
+  ln -s "$(pwd)"/yazi/yazi.toml /home/"$USER"/.config/yazi/
+}
+
+function install_bat() {
+	echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
+
+	case $package_manager in
+	dnf | zypper)
+		sudo $package_manager install -y bat
+		;;
+	esac
+
+	ln -s "$(pwd)"/bat /home/"$USER"/.config/
+	bat cache --build
+}
+
 function install_helix_editor() {
 	echo -e "\n${GREEN}Installing Helix editor...${NO_COLOR}"
 
@@ -304,7 +337,10 @@ function install_search_and_replace_tool() {
 
 detect_installed_package_manager
 install_git
+install_meson
 install_font
+install_yazi_file_manager
+install_bat
 install_zoxide
 install_tmux
 install_starship_prompt
