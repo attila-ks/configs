@@ -47,7 +47,7 @@ function install_yazi_file_manager() {
 		;;
 	esac
 
-  ln -s "$(pwd)"/yazi/yazi.toml /home/"$USER"/.config/yazi/
+	ln -s "$(pwd)"/yazi/yazi.toml /home/"$USER"/.config/yazi/
 }
 
 function install_bat() {
