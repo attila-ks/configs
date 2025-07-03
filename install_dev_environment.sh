@@ -9,7 +9,6 @@
 # TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
 # TODO: Add Rust support for Helix editor.
-# TODO: Remove the package manager switch-case statements.
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -24,6 +23,8 @@ function detect_installed_package_manager() {
 		package_manager="dnf"
 	elif [ -x "$(command -v zypper)" ]; then
 		package_manager="zypper"
+	elif [ -x "$(command -v apt)" ]; then
+		package_manager="apt"
 	else
 		echo -e "\n${RED}Package manager detection failed. Exiting...${NO_COLOR}"
 		exit 1
@@ -37,13 +38,9 @@ function install_git() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y git 2>&1) || {
-			echo -e "\n\t${RED}Git installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y git 2>&1) || {
+		echo -e "\n\t${RED}Git installation failed:${NO_COLOR} ${error}"
+	}
 
 	# FIXME: The following command fails because .gitconfig is added to .gitignore
 	ln -s "$(pwd)"/git/.gitconfig "$HOME"/
@@ -54,13 +51,9 @@ function install_yazi_file_manager() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y yazi 2>&1) || {
-			echo -e "\n\t${RED}Yazi installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y yazi 2>&1) || {
+		echo -e "\n\t${RED}Yazi installation failed:${NO_COLOR} ${error}"
+	}
 
 	ln -s "$(pwd)"/yazi/yazi.toml /home/"$USER"/.config/yazi/
 }
@@ -70,13 +63,9 @@ function install_bat() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y bat 2>&1) || {
-			echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y bat 2>&1) || {
+		echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
+	}
 
 	ln -s "$(pwd)"/bat /home/"$USER"/.config/
 	bat cache --build
@@ -87,13 +76,9 @@ function install_helix_editor() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y helix 2>&1) || {
-			echo -e "\n\t${RED}Helix installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y helix 2>&1) || {
+		echo -e "\n\t${RED}Helix installation failed:${NO_COLOR} ${error}"
+	}
 
 	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
 	ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
@@ -111,13 +96,9 @@ function install_tmux() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y tmux 2>&1) || {
-			echo -e "\n\t${RED}Tmux installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y tmux 2>&1) || {
+		echo -e "\n\t${RED}Tmux installation failed:${NO_COLOR} ${error}"
+	}
 
 	ln -s "$(pwd)"/tmux/.tmux.conf /home/"$USER"/
 
@@ -145,13 +126,9 @@ function install_fzf() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y fzf 2>&1) || {
-			echo -e "\n\t${RED}fzf installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y fzf 2>&1) || {
+		echo -e "\n\t${RED}fzf installation failed:${NO_COLOR} ${error}"
+	}
 }
 
 function install_trash_cli() {
@@ -160,15 +137,11 @@ function install_trash_cli() {
 	echo -e "\n\t${GREEN}Installing pipx dependency...${NO_COLOR}"
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y pipx 2>&1) || {
-			echo -e "\n\t\t${RED}pipx installation failed:${NO_COLOR} ${error}"
-		}
+	error=$(sudo $package_manager install -y pipx 2>&1) || {
+		echo -e "\n\t\t${RED}pipx installation failed:${NO_COLOR} ${error}"
+	}
 
-		pipx ensurepath
-		;;
-	esac
+	pipx ensurepath
 
 	error=$(pipx install trash-cli 2>&1) || {
 		echo -e "\n\t${RED}trash-cli installation failed:${NO_COLOR} ${error}"
@@ -180,13 +153,9 @@ function install_fish_shell() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y fish 2>&1) || {
-			echo -e "\n\t${RED}Fish shell installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y fish 2>&1) || {
+		echo -e "\n\t${RED}Fish shell installation failed:${NO_COLOR} ${error}"
+	}
 
 	if [ -e /home/"$USER"/.config/fish/config.fish ]; then
 		trash-put /home/"$USER"/.config/fish/config.fish
@@ -205,13 +174,9 @@ function install_zoxide() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y zoxide 2>&1) || {
-			echo -e "\n\t${RED}zoxide installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y zoxide 2>&1) || {
+		echo -e "\n\t${RED}zoxide installation failed:${NO_COLOR} ${error}"
+	}
 }
 
 function install_font() {
@@ -235,13 +200,9 @@ function install_alacritty() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y alacritty 2>&1) || {
-			echo -e "\n\t${RED}Alacritty installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y alacritty 2>&1) || {
+		echo -e "\n\t${RED}Alacritty installation failed:${NO_COLOR} ${error}"
+	}
 
 	if [ ! -d /home/"$USER"/.config/alacritty ]; then
 		mkdir /home/"$USER"/.config/alacritty
@@ -261,13 +222,9 @@ function install_tealdeer() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y tealdeer 2>&1) || {
-			echo -e "\n\t${RED}tealdeer installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y tealdeer 2>&1) || {
+		echo -e "\n\t${RED}tealdeer installation failed:${NO_COLOR} ${error}"
+	}
 
 	echo -e "\n${GREEN}Updating tealdeer cache...${NO_COLOR}"
 	tldr --update
@@ -278,13 +235,9 @@ function install_glow() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y glow 2>&1) || {
-			echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(sudo $package_manager install -y glow 2>&1) || {
+		echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
+	}
 }
 
 function install_python_lsp() {
@@ -302,18 +255,14 @@ function install_bash_lsp() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		echo -e "\n\t${GREEN}Installing shellcheck dependency...${NO_COLOR}"
-		error=$(sudo $package_manager install -y shellcheck 2>&1) || {
-			echo -e "\n\t${RED}shellcheck installation failed:${NO_COLOR} ${error}"
-		}
-		echo -e "\n\t${GREEN}Installing npm dependency...${NO_COLOR}"
-		error=$(sudo $package_manager install -y npm 2>&1) || {
-			echo -e "\n\t${RED}npm installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	echo -e "\n\t${GREEN}Installing shellcheck dependency...${NO_COLOR}"
+	error=$(sudo $package_manager install -y shellcheck 2>&1) || {
+		echo -e "\n\t${RED}shellcheck installation failed:${NO_COLOR} ${error}"
+	}
+	echo -e "\n\t${GREEN}Installing npm dependency...${NO_COLOR}"
+	error=$(sudo $package_manager install -y npm 2>&1) || {
+		echo -e "\n\t${RED}npm installation failed:${NO_COLOR} ${error}"
+	}
 
 	error=$(sudo npm install -g bash-language-server 2>&1) || {
 		echo -e "\n\t${RED}Bash LSP installation failed:${NO_COLOR} ${error}"
@@ -337,14 +286,10 @@ function install_search_and_replace_tool() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		echo -e "\n\t${GREEN}Installing ripgrep dependency...${NO_COLOR}"
-		error=$(sudo $package_manager install -y ripgrep 2>&1) || {
-			echo -e "\n\t${RED}ripgrep installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	echo -e "\n\t${GREEN}Installing ripgrep dependency...${NO_COLOR}"
+	error=$(sudo $package_manager install -y ripgrep 2>&1) || {
+		echo -e "\n\t${RED}ripgrep installation failed:${NO_COLOR} ${error}"
+	}
 
 	error=$(cargo install serpl 2>&1) || {
 		echo -e "\n\t${RED}serpl installation failed:${NO_COLOR} ${error}"
