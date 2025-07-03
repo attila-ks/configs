@@ -86,6 +86,24 @@ function install_bat() {
 	bat cache --build
 }
 
+function install_cpp_tools() {
+	echo -e "\n${GREEN}Installing C++ tools (clangd, clang-format, codelldb)...${NO_COLOR}"
+
+	local error
+	local clang_tools="clang-tools-extra"
+
+	if [ $package_manager = "apt" ]; then
+		clang_tools="clang-tools"
+	fi
+
+	error=$(sudo $package_manager install -y $clang_tools 2>&1) || {
+		echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
+	}
+
+	# `lldb-vscode` has been renamed to `lldb-dap`, but Helix editor looks for the former.
+	ln -s /usr/bin/lldb-dap /usr/bin/lldb-vscode
+}
+
 function install_helix_editor() {
 	echo -e "\n${GREEN}Installing Helix editor...${NO_COLOR}"
 
@@ -104,6 +122,7 @@ function install_helix_editor() {
 
 	install_yazi_file_manager
 	install_glow
+	install_cpp_tools
 	install_python_lsp
 	install_bash_lsp
 	install_search_and_replace_tool
