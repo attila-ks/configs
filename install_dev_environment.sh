@@ -18,7 +18,7 @@ function detect_installed_package_manager() {
 		exit 1
 	fi
 
-	echo -e "\n${GREEN}Detected package manager: $package_manager.${NO_COLOR}"
+	echo -e "\n${GREEN}Detected package manager: $package_manager${NO_COLOR}"
 }
 
 function install_git() {
