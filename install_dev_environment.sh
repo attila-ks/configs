@@ -41,9 +41,13 @@ function install_git() {
 function install_yazi_file_manager() {
 	echo -e "\n${GREEN}Installing Yazi file manager...${NO_COLOR}"
 
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y yazi
+		error=$(sudo $package_manager install -y yazi 2>&1) || {
+			echo -e "\n\t${RED}Yazi installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
 
@@ -53,9 +57,13 @@ function install_yazi_file_manager() {
 function install_bat() {
 	echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
 
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y bat
+		error=$(sudo $package_manager install -y bat 2>&1) || {
+			echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
 
