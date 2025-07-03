@@ -86,6 +86,13 @@ function install_helix_editor() {
 
 	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
 	ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
+
+	install_yazi_file_manager
+	install_glow
+	install_python_lsp
+	install_bash_lsp
+	install_fish_lsp
+	install_search_and_replace_tool
 }
 
 function install_tmux() {
@@ -338,7 +345,6 @@ function install_search_and_replace_tool() {
 detect_installed_package_manager
 install_git
 install_font
-install_yazi_file_manager
 install_bat
 install_zoxide
 install_tmux
@@ -348,9 +354,4 @@ install_trash_cli
 install_alacritty
 install_tealdeer
 install_fish_shell
-install_glow
 install_helix_editor
-install_python_lsp
-install_bash_lsp
-install_fish_lsp
-install_search_and_replace_tool
