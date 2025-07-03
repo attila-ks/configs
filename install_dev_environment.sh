@@ -133,13 +133,9 @@ function install_starship_prompt() {
 
 	local error
 
-	case $package_manager in
-	dnf | zypper)
-		error=$(sudo $package_manager install -y starship 2>&1) || {
-			echo -e "\n\t${RED}Starship prompt installation failed:${NO_COLOR} ${error}"
-		}
-		;;
-	esac
+	error=$(curl -sS https://starship.rs/install.sh | sh -s -- --yes 2>&1) || {
+		echo -e "\n\t${RED}Starship prompt installation failed:${NO_COLOR} ${error}"
+	}
 
 	ln -s "$(pwd)"/starship.toml /home/"$USER"/.config/
 }
@@ -161,14 +157,16 @@ function install_fzf() {
 function install_trash_cli() {
 	echo -e "\n${GREEN}Installing trash-cli...${NO_COLOR}"
 
-	echo -e "\n\t${GREEN}Installing python3-pipx dependency...${NO_COLOR}"
+	echo -e "\n\t${GREEN}Installing pipx dependency...${NO_COLOR}"
 	local error
 
 	case $package_manager in
 	dnf | zypper)
-		error=$(sudo $package_manager install -y python3-pipx 2>&1) || {
-			echo -e "\n\t\t${RED}python3-pipx installation failed:${NO_COLOR} ${error}"
+		error=$(sudo $package_manager install -y pipx 2>&1) || {
+			echo -e "\n\t\t${RED}pipx installation failed:${NO_COLOR} ${error}"
 		}
+
+		pipx ensurepath
 		;;
 	esac
 
