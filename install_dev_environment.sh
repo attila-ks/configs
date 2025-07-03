@@ -8,7 +8,6 @@
 # TODO: Add Copilot support for Helix editor.
 # TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
-# TODO: Add Rust support for Helix editor.
 # TODO: Remove the package manager switch-case statements.
 
 GREEN='\033[0;32m'
@@ -102,7 +101,6 @@ function install_helix_editor() {
 	install_glow
 	install_python_lsp
 	install_bash_lsp
-	install_fish_lsp
 	install_search_and_replace_tool
 }
 
@@ -292,18 +290,6 @@ function install_bash_lsp() {
 	error=$(sudo npm install -g bash-language-server 2>&1) || {
 		echo -e "\n\t${RED}Bash LSP installation failed:${NO_COLOR} ${error}"
 	}
-}
-
-function install_fish_lsp() {
-	echo -e "\n${GREEN}Installing Fish LSP...${NO_COLOR}"
-
-	local error
-
-	error=$(sudo npm install -g fish-lsp 2>&1) || {
-		echo -e "\n\t${RED}Fish LSP installation failed:${NO_COLOR} ${error}"
-	}
-
-	fish-lsp complete >~/.config/fish/completions/fish-lsp.fish
 }
 
 function install_search_and_replace_tool() {
