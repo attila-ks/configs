@@ -33,9 +33,9 @@ function install_git() {
 		}
 		;;
 	esac
-  
+
 	# FIXME: The following command fails because .gitconfig is added to .gitignore
-  ln -s "$(pwd)"/git/.gitconfig "$HOME"/
+	ln -s "$(pwd)"/git/.gitconfig "$HOME"/
 }
 
 function install_helix_editor() {
@@ -280,7 +280,7 @@ function install_fish_lsp() {
 		echo -e "\n\t${RED}Fish LSP installation failed:${NO_COLOR} ${error}"
 	}
 
-	fish-lsp complete > ~/.config/fish/completions/fish-lsp.fish
+	fish-lsp complete >~/.config/fish/completions/fish-lsp.fish
 }
 
 function install_search_and_replace_tool() {
@@ -301,7 +301,7 @@ function install_search_and_replace_tool() {
 		echo -e "\n\t${RED}serpl installation failed:${NO_COLOR} ${error}"
 	}
 }
- 
+
 detect_installed_package_manager
 install_git
 install_font
