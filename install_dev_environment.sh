@@ -320,7 +320,6 @@ function install_rust_toolchain() {
 
 detect_installed_package_manager
 install_git
-install_fish_shell
 install_font
 install_rust_toolchain
 install_bat
@@ -329,7 +328,6 @@ install_tmux
 install_starship_prompt
 install_fzf
 install_trash_cli
-install_helix_editor
 install_tealdeer
 install_fish_shell
 install_helix_editor
