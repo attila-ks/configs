@@ -9,6 +9,11 @@
 # TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
 # TODO: Remove the package manager switch-case statements.
+# TODO: Add Catch2 test runner support for Helix editor or terminal.
+# TODO: Add CMake support for Helix editor.
+# TODO: Add Docker support for Helix editor.
+# TODO: Add Robot Framework support for Helix editor.
+# TODO: Consider to add GitLab CLI support for Helix editor or terminal.
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
