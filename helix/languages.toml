@@ -1,14 +1,24 @@
 [[language]]
-name = "cpp"
-formatter = { command = "clang-format" }
+name = "python"
+auto-format = true
+formatter = { command = "ruff", args = [ "format", "-" ] }
 
-[language.debugger]
-name = "lldb-vscode"
-transport = "stdio"
-command = "lldb-vscode"
+[[language]]
+name = "qml"
+# FIXME: Formatting deletes the entire file content.
+# auto-format = true
+formatter = { command = "qmlformat-qt6", args = [ "--inplace", "--normalize" ] }
 
-[[language.debugger.templates]]
-name = "binary"
-request = "launch"
-completion = [ { name = "binary", completion = "filename" } ]
-args = { program = "{0}", runInTerminal = true }
+[language-server.qmlls]
+# TODO: Specify the build directory too
+# FIXME: It seems qmlls cannot find the specified import paths and documentation path.
+args = [ "-I /home/$USER/Qt/Tools/QtCreator/lib/Qt/qml/QtQuick/", "-d /home/$USER/Qt/Docs/Qt-6.8.1/" ]
+
+[[language]]
+name = "fish"
+language-servers = [ "fish-lsp" ]
+
+[language-server.fish-lsp]
+command = "fish-lsp"
+args = [ "start" ]
+environment = { "fish_lsp_show_client_popups" = "false" }

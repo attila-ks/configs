@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# TODO: Exit functions on error.
+# TODO: Check if packages are already installed.
+# TODO: Hide redundant outputs.
+# TODO: Install Markdown linter for Helix editor.
+# TODO: Consider using Scooter instead of Serpl for search and replace in Helix editor.
+# TODO: Add Copilot support for Helix editor.
+# TODO: Add TOML LSP support for Helix editor.
+# TODO: Add Harper spell checker support for Helix editor.
+# TODO: Add Rust support for Helix editor.
+# TODO: Remove the package manager switch-case statements.
+
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NO_COLOR='\033[0m'
@@ -18,135 +29,93 @@ function detect_installed_package_manager() {
 		exit 1
 	fi
 
-	echo -e "\n${GREEN}Detected package manager: $package_manager.${NO_COLOR}"
+	echo -e "\n${GREEN}Detected package manager: $package_manager${NO_COLOR}"
 }
 
 function install_git() {
 	echo -e "\n${GREEN}Installing Git...${NO_COLOR}"
 
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y git
+		error=$(sudo $package_manager install -y git 2>&1) || {
+			echo -e "\n\t${RED}Git installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
+
+	# FIXME: The following command fails because .gitconfig is added to .gitignore
+	ln -s "$(pwd)"/git/.gitconfig "$HOME"/
 }
 
-function install_meson() {
-	echo -e "\n${GREEN}Installing Meson...${NO_COLOR}"
+function install_yazi_file_manager() {
+	echo -e "\n${GREEN}Installing Yazi file manager...${NO_COLOR}"
+
+	local error
 
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y meson
-		;;
-	esac
-}
-
-function install_ripgrep() {
-	echo -e "\n${GREEN}Installing ripgrep (an alternative to 'grep')...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y ripgrep
-		;;
-	esac
-}
-
-function install_fd() {
-	echo -e "\n${GREEN}Installing fd (an alternative to 'find')...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y fd
-		;;
-	esac
-}
-
-function install_npm() {
-	echo -e "\n${GREEN}Installing npm...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y npm
-		;;
-	esac
-}
-
-USER=$(whoami)
-
-function install_lf_file_manager() {
-	echo -e "\n${GREEN}Installing lf file manager...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y lf
+		error=$(sudo $package_manager install -y yazi 2>&1) || {
+			echo -e "\n\t${RED}Yazi installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
 
-	ln -s "$(pwd)"/lf /home/"$USER"/.config/
+	ln -s "$(pwd)"/yazi/yazi.toml /home/"$USER"/.config/yazi/
 }
 
 function install_bat() {
-	echo -e "\n${GREEN}Install bat (an alternative to 'cat')...${NO_COLOR}"
+	echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
+
+	local error
 
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y bat
+		error=$(sudo $package_manager install -y bat 2>&1) || {
+			echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
 
 	ln -s "$(pwd)"/bat /home/"$USER"/.config/
-	# TODO: Use `curl` to download `catppuccin-mocha` theme
 	bat cache --build
 }
 
-function install_cpp_tools() {
-	echo -e "\n${GREEN}Installing C++ tools (clangd, clang-format, codelldb)...${NO_COLOR}"
-
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y clang-tools-extra
-		;;
-	esac
-
-	# `lldb-vscode` has been renamed to `lldb-dap`, but Helix editor looks for the former.
-	ln -s /usr/bin/lldb-dap /usr/bin/lldb-vscode
-}
-
-function install_meson_lsp() {
-	echo -e "\n${GREEN}Installing Meson LSP...${NO_COLOR}"
-	# Helix currently has no built-in support for Meson.
-}
-
-function install_bash_lsp() {
-	echo -e "\n${GREEN}Installing Bash LSP...${NO_COLOR}"
-	install_npm
-
-	sudo npm install -g bash-language-server
-}
-
 function install_helix_editor() {
-	echo -e "\n${GREEN}Installing language tools for Helix editor...${NO_COLOR}"
-	install_cpp_tools
-	install_meson_lsp
-	install_bash_lsp
-
 	echo -e "\n${GREEN}Installing Helix editor...${NO_COLOR}"
 
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y helix
+		error=$(sudo $package_manager install -y helix 2>&1) || {
+			echo -e "\n\t${RED}Helix installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
 
 	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
+	ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
+
+	install_yazi_file_manager
+	install_glow
+	install_python_lsp
+	install_bash_lsp
+	install_fish_lsp
+	install_search_and_replace_tool
 }
 
 function install_tmux() {
 	echo -e "\n${GREEN}Installing tmux...${NO_COLOR}"
 
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y tmux
+		error=$(sudo $package_manager install -y tmux 2>&1) || {
+			echo -e "\n\t${RED}Tmux installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
 
@@ -162,11 +131,11 @@ function install_tmux() {
 function install_starship_prompt() {
 	echo -e "\n${GREEN}Installing Starship prompt...${NO_COLOR}"
 
-	case $package_manager in
-	dnf | zypper)
-		sudo $package_manager install -y starship
-		;;
-	esac
+	local error
+
+	error=$(curl -sS https://starship.rs/install.sh | sh -s -- --yes 2>&1) || {
+		echo -e "\n\t${RED}Starship prompt installation failed:${NO_COLOR} ${error}"
+	}
 
 	ln -s "$(pwd)"/starship.toml /home/"$USER"/.config/
 }
@@ -174,9 +143,13 @@ function install_starship_prompt() {
 function install_fzf() {
 	echo -e "\n${GREEN}Installing fzf...${NO_COLOR}"
 
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y fzf
+		error=$(sudo $package_manager install -y fzf 2>&1) || {
+			echo -e "\n\t${RED}fzf installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
 }
@@ -184,21 +157,34 @@ function install_fzf() {
 function install_trash_cli() {
 	echo -e "\n${GREEN}Installing trash-cli...${NO_COLOR}"
 
+	echo -e "\n\t${GREEN}Installing pipx dependency...${NO_COLOR}"
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y python3-pipx
+		error=$(sudo $package_manager install -y pipx 2>&1) || {
+			echo -e "\n\t\t${RED}pipx installation failed:${NO_COLOR} ${error}"
+		}
+
+		pipx ensurepath
 		;;
 	esac
 
-	pipx install trash-cli
+	error=$(pipx install trash-cli 2>&1) || {
+		echo -e "\n\t${RED}trash-cli installation failed:${NO_COLOR} ${error}"
+	}
 }
 
 function install_fish_shell() {
 	echo -e "\n${GREEN}Installing fish shell...${NO_COLOR}"
 
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y fish
+		error=$(sudo $package_manager install -y fish 2>&1) || {
+			echo -e "\n\t${RED}Fish shell installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
 
@@ -207,8 +193,9 @@ function install_fish_shell() {
 	fi
 
 	ln -s "$(pwd)"/fish/config.fish /home/"$USER"/.config/fish/
-	# TODO: Use `curl` to download the `catppuccin-mocha` theme
 	ln -s "$(pwd)"/fish/themes /home/"$USER"/.config/fish/
+	# Disables fish's welcome message.
+	fish -c 'set -U fish_greeting'
 	# Sets the Fish shell as the default shell.
 	sudo chsh -s /usr/bin/fish
 }
@@ -216,19 +203,43 @@ function install_fish_shell() {
 function install_zoxide() {
 	echo -e "\n${GREEN}Installing zoxide...${NO_COLOR}"
 
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y zoxide
+		error=$(sudo $package_manager install -y zoxide 2>&1) || {
+			echo -e "\n\t${RED}zoxide installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
+}
+
+function install_font() {
+	echo -e "\n${GREEN}Installing JetBrainsMono font...${NO_COLOR}"
+
+	if [ ! -d /home/"$USER"/.fonts ]; then
+		mkdir /home/"$USER"/.fonts
+	fi
+
+	local error
+
+	cd /home/"$USER"/.fonts
+	error=$(curl -LO https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFont-Regular.ttf 2>&1) || {
+		echo -e "\n\t${RED}Downloading JetBrainsMono failed:${NO_COLOR} ${error}"
+	}
+	cd -
 }
 
 function install_tealdeer() {
 	echo -e "\n${GREEN}Installing tealdeer...${NO_COLOR}"
 
+	local error
+
 	case $package_manager in
 	dnf | zypper)
-		sudo $package_manager install -y tealdeer
+		error=$(sudo $package_manager install -y tealdeer 2>&1) || {
+			echo -e "\n\t${RED}tealdeer installation failed:${NO_COLOR} ${error}"
+		}
 		;;
 	esac
 
@@ -236,11 +247,88 @@ function install_tealdeer() {
 	tldr --update
 }
 
+function install_glow() {
+	echo -e "\n${GREEN}Installing Glow markdown reader...${NO_COLOR}"
+
+	local error
+
+	case $package_manager in
+	dnf | zypper)
+		error=$(sudo $package_manager install -y glow 2>&1) || {
+			echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
+		}
+		;;
+	esac
+}
+
+function install_python_lsp() {
+	echo -e "\n${GREEN}Installing ruff Python LSP...${NO_COLOR}"
+
+	local error
+
+	error=$(pip install ruff 2>&1) || {
+		echo -e "\n\t${RED}ruff installation failed:${NO_COLOR} ${error}"
+	}
+}
+
+function install_bash_lsp() {
+	echo -e "\n${GREEN}Installing Bash LSP...${NO_COLOR}"
+
+	local error
+
+	case $package_manager in
+	dnf | zypper)
+		echo -e "\n\t${GREEN}Installing shellcheck dependency...${NO_COLOR}"
+		error=$(sudo $package_manager install -y shellcheck 2>&1) || {
+			echo -e "\n\t${RED}shellcheck installation failed:${NO_COLOR} ${error}"
+		}
+		echo -e "\n\t${GREEN}Installing npm dependency...${NO_COLOR}"
+		error=$(sudo $package_manager install -y npm 2>&1) || {
+			echo -e "\n\t${RED}npm installation failed:${NO_COLOR} ${error}"
+		}
+		;;
+	esac
+
+	error=$(sudo npm install -g bash-language-server 2>&1) || {
+		echo -e "\n\t${RED}Bash LSP installation failed:${NO_COLOR} ${error}"
+	}
+}
+
+function install_fish_lsp() {
+	echo -e "\n${GREEN}Installing Fish LSP...${NO_COLOR}"
+
+	local error
+
+	error=$(sudo npm install -g fish-lsp 2>&1) || {
+		echo -e "\n\t${RED}Fish LSP installation failed:${NO_COLOR} ${error}"
+	}
+
+	fish-lsp complete >~/.config/fish/completions/fish-lsp.fish
+}
+
+function install_search_and_replace_tool() {
+	echo -e "\n${GREEN}Installing Serpl (search and replace tool)...${NO_COLOR}"
+
+	local error
+
+	case $package_manager in
+	dnf | zypper)
+		echo -e "\n\t${GREEN}Installing ripgrep dependency...${NO_COLOR}"
+		error=$(sudo $package_manager install -y ripgrep 2>&1) || {
+			echo -e "\n\t${RED}ripgrep installation failed:${NO_COLOR} ${error}"
+		}
+		;;
+	esac
+
+	error=$(cargo install serpl 2>&1) || {
+		echo -e "\n\t${RED}serpl installation failed:${NO_COLOR} ${error}"
+	}
+}
+
 detect_installed_package_manager
 install_git
-install_meson
 install_fish_shell
-install_lf_file_manager
+install_font
 install_bat
 install_zoxide
 install_tmux
@@ -249,3 +337,5 @@ install_fzf
 install_trash_cli
 install_helix_editor
 install_tealdeer
+install_fish_shell
+install_helix_editor

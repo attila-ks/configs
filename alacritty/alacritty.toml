@@ -1,12 +1,11 @@
-# Set the theme
-import = ["~/.config/alacritty/themes/catppuccin-mocha.toml"]
+# Sets the theme
+general.import = ["~/.config/alacritty/themes/catppuccin-mocha.toml"]
 
 [window]
 startup_mode = "Maximized"
 
 [font]
 normal = { family = "JetBrainsMonoNL Nerd Font", style = "Regular" }
-# TODO: Specify bold, italic and bold_italic too!
 
 [cursor]
 style = { shape = "Block", blinking = "On" }

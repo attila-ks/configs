@@ -4,7 +4,8 @@ theme = "catppuccin_mocha"
 true-color = true
 bufferline = "multiple"
 line-number = "relative"
-mouse = false
+mouse = true
+shell = ["fish", "-c"]
 
 [editor.file-picker]
 hidden = false
@@ -16,9 +17,20 @@ right = ["diagnostics", "selections", "register", "position", "file-encoding", "
 [editor.indent-guides]
 render = true
 
-# TODO: Consider to use these keymaps in SELECT mode
+#################### Custom keybindings ####################
+[keys.normal.space]
+# TODO: Add keymap description.
+# Open the Yazi file manager in the root directory.
+e = [":new", ":insert-output tmux new-window -n yazi 'yazi'", ":buffer-close!", ":redraw"]
+# Open the Glow markdown viewer.
+m = [":new", ":insert-output tmux new-window -n glow 'glow'", ":buffer-close!", ":redraw"]
+# Open search and replace tool.
+C-f = [":new", ":insert-output tmux new-window -n serpl 'serpl'", ":buffer-close!", ":redraw"]
+
 [keys.normal]
-# Move line(s) up
+# TODO: Move the following two keymaps to visual mode!
+# Move line(s) up.
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
-# Move line(s) down
+# Move line(s) down.
 C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+################# End of custom keybindings #################
