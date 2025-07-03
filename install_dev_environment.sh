@@ -38,14 +38,6 @@ function install_git() {
 	ln -s "$(pwd)"/git/.gitconfig "$HOME"/
 }
 
-function install_meson() {
-	echo -e "\n${GREEN}Installing Meson build system...${NO_COLOR}"
-
-	sudo dnf install -y meson
-	sudo dnf copr enable jcwasmx86/Swift-MesonLSP
-	sudo dnf install mesonlsp
-}
-
 function install_yazi_file_manager() {
 	echo -e "\n${GREEN}Installing Yazi file manager...${NO_COLOR}"
 
@@ -337,7 +329,6 @@ function install_search_and_replace_tool() {
 
 detect_installed_package_manager
 install_git
-install_meson
 install_font
 install_yazi_file_manager
 install_bat
