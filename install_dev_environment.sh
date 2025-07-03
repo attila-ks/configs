@@ -62,13 +62,19 @@ function install_bat() {
 	echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
 
 	local error
+	local bat="bat"
 
-	error=$(sudo $package_manager install -y bat 2>&1) || {
+	if [ $package_manager = "apt" ]; then
+		bat="batcat"
+		fish -c 'alias --save bat=batcat'
+	fi
+
+	error=$(sudo $package_manager install -y $bat 2>&1) || {
 		echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
 	}
 
 	ln -s "$(pwd)"/bat /home/"$USER"/.config/
-	bat cache --build
+	$bat cache --build
 }
 
 function install_helix_editor() {
@@ -157,7 +163,9 @@ function install_fish_shell() {
 		echo -e "\n\t${RED}Fish shell installation failed:${NO_COLOR} ${error}"
 	}
 
-	if [ -e /home/"$USER"/.config/fish/config.fish ]; then
+	if [ ! -d /home/"$USER"/.config/fish ]; then
+		mkdir /home/"$USER"/.config/fish
+	elif [ -e /home/"$USER"/.config/fish/config.fish ]; then
 		trash-put /home/"$USER"/.config/fish/config.fish
 	fi
 
@@ -166,7 +174,7 @@ function install_fish_shell() {
 	# Disables fish's welcome message.
 	fish -c 'set -U fish_greeting'
 	# Sets the Fish shell as the default shell.
-	sudo chsh -s /usr/bin/fish
+	chsh -s /usr/bin/fish
 }
 
 function install_zoxide() {
