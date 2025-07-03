@@ -9,8 +9,9 @@
 # TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
 # TODO: Add Rust support for Helix editor.
+# TODO: Consider to add a Git tool for Helix editor or terminal.
 # FIXME: bat installation still fails on Ubuntu
-# FIXME: Yazi installation fails on Ubuntu (install with snap?)
+# FIXME: Yazi installation fails on Ubuntu (install with snap or cargo?)
 # FIXME: Glow installation fails on Ubuntu (install with snap?)
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: serpl installation fails because of missing cargo
