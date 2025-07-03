@@ -67,6 +67,7 @@ function install_yazi_file_manager() {
 	}
 
 	ln -s "$(pwd)"/yazi/yazi.toml /home/"$USER"/.config/yazi/
+	ln -s "$(pwd)"/fish/functions/y.fish /home/"$USER"/.config/fish/functions/
 }
 
 function install_bat() {
