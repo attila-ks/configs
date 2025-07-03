@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# TODO: Exit functions on error.
+# TODO: Check if packages are already installed.
+# TODO: Hide redundant outputs.
+# TODO: Install Markdown linter for Helix editor.
+# TODO: Consider using Scooter instead of Serpl for search and replace in Helix editor.
+# TODO: Add Copilot support for Helix editor.
+# TODO: Add TOML LSP support for Helix editor.
+# TODO: Add Harper spell checker support for Helix editor.
+# TODO: Add Rust support for Helix editor.
+# TODO: Remove the package manager switch-case statements.
+
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NO_COLOR='\033[0m'
