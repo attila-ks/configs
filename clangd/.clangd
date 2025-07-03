@@ -1,3 +1,0 @@
-Diagnostics:
-  ClangTidy:
-    Add: [ modernize*, bugprone*, cppcoreguidelines*, performance*, readability*, clang-analyzer*, portability*, cert* ]
