@@ -11,7 +11,6 @@
 # TODO: Add Rust support for Helix editor.
 # TODO: Consider to add a Git tool for Helix editor or terminal.
 # FIXME: bat installation still fails on Ubuntu
-# FIXME: Yazi installation fails on Ubuntu (install with snap or cargo?)
 # FIXME: Glow installation fails on Ubuntu (install with snap?)
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: serpl installation fails because of missing cargo
@@ -57,7 +56,13 @@ function install_yazi_file_manager() {
 
 	local error
 
-	error=$(sudo $package_manager install -y yazi 2>&1) || {
+	echo -e "\n\t${GREEN}Installing optional extensions...${NO_COLOR}"
+
+	error=$(sudo $package_manager install -y jq poppler fd rg 2>&1) || {
+		echo -e "\n\t\t${RED}Optional extension(s) installation failed:${NO_COLOR} ${error}"
+	}
+
+	error=$(cargo install --locked yazi-fm yazi-cli 2>&1) || {
 		echo -e "\n\t${RED}Yazi installation failed:${NO_COLOR} ${error}"
 	}
 
@@ -310,9 +315,22 @@ function install_search_and_replace_tool() {
 	}
 }
 
+function install_rust_toolchain() {
+	echo -e "\n${GREEN}Installing Rust toolchain...${NO_COLOR}"
+
+	local error
+
+	error=$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --yes 2>&1) || {
+		echo -e "\n\t${RED}Rust toolchain installation failed:${NO_COLOR} ${error}"
+	}
+
+	rustup update
+}
+
 detect_installed_package_manager
 install_git
 install_font
+install_rust_toolchain
 install_bat
 install_zoxide
 install_tmux
