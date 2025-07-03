@@ -197,7 +197,7 @@ function install_fish_shell() {
 	ln -s "$(pwd)"/fish/config.fish /home/"$USER"/.config/fish/
 	ln -s "$(pwd)"/fish/themes /home/"$USER"/.config/fish/
 	# Disables fish's welcome message.
-	set -U fish_greeting
+	fish -c 'set -U fish_greeting'
 	# Sets the Fish shell as the default shell.
 	sudo chsh -s /usr/bin/fish
 }
