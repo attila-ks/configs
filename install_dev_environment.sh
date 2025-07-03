@@ -14,6 +14,7 @@
 # TODO: Add Docker support for Helix editor.
 # TODO: Add Robot Framework support for Helix editor.
 # TODO: Consider to add GitLab CLI support for Helix editor or terminal.
+# TODO: Add dev-container support for Helix editor.
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
