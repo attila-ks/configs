@@ -11,7 +11,6 @@
 # TODO: Add Rust support for Helix editor.
 # TODO: Consider to add a Git tool for Helix editor or terminal.
 # FIXME: bat installation still fails on Ubuntu
-# FIXME: Glow installation fails on Ubuntu (install with snap?)
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: serpl installation fails because of missing cargo
 
@@ -256,9 +255,15 @@ function install_glow() {
 
 	local error
 
-	error=$(sudo $package_manager install -y glow 2>&1) || {
-		echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
-	}
+	if [ $package_manager = "apt" ]; then
+		error=$(sudo snap install -y glow 2>&1) || {
+			echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
+		}
+	else
+		error=$(sudo $package_manager install -y glow 2>&1) || {
+			echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_python_lsp() {
