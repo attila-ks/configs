@@ -327,7 +327,7 @@ function install_rust_toolchain() {
 
 	local error
 
-	error=$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --yes 2>&1) || {
+	error=$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y 2>&1) || {
 		echo -e "\n\t${RED}Rust toolchain installation failed:${NO_COLOR} ${error}"
 	}
 
