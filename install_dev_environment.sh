@@ -101,6 +101,7 @@ function install_helix_editor() {
 	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
 	ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
 
+	install_rust_toolchain
 	install_yazi_file_manager
 	install_glow
 	install_python_lsp
@@ -331,7 +332,6 @@ function install_rust_toolchain() {
 detect_installed_package_manager
 install_git
 install_font
-install_rust_toolchain
 install_bat
 install_zoxide
 install_tmux
