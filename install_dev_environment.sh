@@ -17,7 +17,6 @@
 # TODO: Add dev-container support for Helix editor.
 # TODO: Consider to add a Git tool for Helix editor or terminal.
 # FIXME: bat installation still fails on Ubuntu
-# FIXME: Glow installation fails on Ubuntu (install with snap?)
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: serpl installation fails because of missing cargo
 
@@ -125,6 +124,7 @@ function install_helix_editor() {
 	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
 	ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
 
+	install_rust_toolchain
 	install_yazi_file_manager
 	install_glow
 	install_cpp_tools
@@ -257,9 +257,15 @@ function install_glow() {
 
 	local error
 
-	error=$(sudo $package_manager install -y glow 2>&1) || {
-		echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
-	}
+	if [ $package_manager = "apt" ]; then
+		error=$(sudo snap install -y glow 2>&1) || {
+			echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
+		}
+	else
+		error=$(sudo $package_manager install -y glow 2>&1) || {
+			echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_python_lsp() {
@@ -321,7 +327,6 @@ function install_rust_toolchain() {
 detect_installed_package_manager
 install_git
 install_font
-install_rust_toolchain
 install_bat
 install_zoxide
 install_tmux
