@@ -10,7 +10,6 @@
 # TODO: Add Harper spell checker support for Helix editor.
 # TODO: Add Rust support for Helix editor.
 # TODO: Consider to add a Git tool for Helix editor or terminal.
-# FIXME: bat installation still fails on Ubuntu
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: serpl installation fails because of missing cargo
 
@@ -73,16 +72,17 @@ function install_bat() {
 	echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
 
 	local error
+
+	error=$(sudo $package_manager install -y bat 2>&1) || {
+		echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
+	}
+
 	local bat="bat"
 
 	if [ $package_manager = "apt" ]; then
 		bat="batcat"
 		fish -c 'alias --save bat=batcat'
 	fi
-
-	error=$(sudo $package_manager install -y $bat 2>&1) || {
-		echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
-	}
 
 	ln -s "$(pwd)"/bat /home/"$USER"/.config/
 	$bat cache --build
