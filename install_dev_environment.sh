@@ -16,7 +16,6 @@
 # TODO: Consider to add GitLab CLI support for Helix editor or terminal.
 # TODO: Add dev-container support for Helix editor.
 # TODO: Consider to add a Git tool for Helix editor or terminal.
-# FIXME: bat installation still fails on Ubuntu
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: serpl installation fails because of missing cargo
 
@@ -79,16 +78,17 @@ function install_bat() {
 	echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
 
 	local error
+
+	error=$(sudo $package_manager install -y bat 2>&1) || {
+		echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
+	}
+
 	local bat="bat"
 
 	if [ $package_manager = "apt" ]; then
 		bat="batcat"
 		fish -c 'alias --save bat=batcat'
 	fi
-
-	error=$(sudo $package_manager install -y $bat 2>&1) || {
-		echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
-	}
 
 	ln -s "$(pwd)"/bat /home/"$USER"/.config/
 	$bat cache --build
@@ -317,7 +317,7 @@ function install_rust_toolchain() {
 
 	local error
 
-	error=$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --yes 2>&1) || {
+	error=$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y 2>&1) || {
 		echo -e "\n\t${RED}Rust toolchain installation failed:${NO_COLOR} ${error}"
 	}
 
