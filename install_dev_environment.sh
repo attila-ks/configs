@@ -109,6 +109,7 @@ function install_helix_editor() {
 	install_python_lsp
 	install_bash_lsp
 	install_fish_lsp
+	install_toml_lsp
 	install_search_and_replace_tool
 	install_gitui
 }
@@ -309,6 +310,16 @@ function install_fish_lsp() {
 	}
 
 	fish-lsp complete >~/.config/fish/completions/fish-lsp.fish
+}
+
+function install_toml_lsp() {
+	echo -e "\n${GREEN}Installing TOML LSP...${NO_COLOR}"
+
+	local error
+
+	error=$(sudo npm install -g @taplo/cli 2>&1) || {
+		echo -e "\n\t${RED}TOML LSP installation failed:${NO_COLOR} ${error}"
+	}
 }
 
 function install_search_and_replace_tool() {
