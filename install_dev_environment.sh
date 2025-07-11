@@ -4,7 +4,6 @@
 # TODO: Check if packages are already installed.
 # TODO: Hide redundant outputs.
 # TODO: Install Markdown linter for Helix editor.
-# TODO: Consider using Scooter instead of Serpl for search and replace in Helix editor.
 # TODO: Add Copilot support for Helix editor.
 # TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
@@ -15,9 +14,13 @@
 # TODO: Add Robot Framework support for Helix editor.
 # TODO: Consider to add GitLab CLI support for Helix editor or terminal.
 # TODO: Add dev-container support for Helix editor.
-# TODO: Consider to add a Git tool for Helix editor or terminal.
+# TODO: Add missing Helix debug adapters.
+# TODO: Add missing Helix formatters.
+# TODO: Add missing Helix Highlights.
+# TODO: Add missing Helix Textobjects.
+# TODO: Add missing Helix Indents.
 # FIXME: ruff installation fails on Ubuntu
-# FIXME: serpl installation fails because of missing cargo
+# FIXME: Shell must be restarted after installing Rust.
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -131,6 +134,7 @@ function install_helix_editor() {
 	install_python_lsp
 	install_bash_lsp
 	install_search_and_replace_tool
+	install_gitui
 }
 
 function install_tmux() {
@@ -298,17 +302,27 @@ function install_bash_lsp() {
 }
 
 function install_search_and_replace_tool() {
-	echo -e "\n${GREEN}Installing Serpl (search and replace tool)...${NO_COLOR}"
+	echo -e "\n${GREEN}Installing Scooter (search and replace tool)...${NO_COLOR}"
 
 	local error
 
-	echo -e "\n\t${GREEN}Installing ripgrep dependency...${NO_COLOR}"
-	error=$(sudo $package_manager install -y ripgrep 2>&1) || {
-		echo -e "\n\t${RED}ripgrep installation failed:${NO_COLOR} ${error}"
+	error=$(cargo install scooter --locked 2>&1) || {
+		echo -e "\n\t${RED}Scooter installation failed:${NO_COLOR} ${error}"
+	}
+}
+
+function install_gitui() {
+	echo -e "\n${GREEN}Installing gitui...${NO_COLOR}"
+
+	local error
+
+	echo -e "\n\t${GREEN}Installing CMake dependency...${NO_COLOR}"
+	error=$(sudo $package_manager install -y cmake 2>&1) || {
+		echo -e "\n\t${RED}CMake installation failed:${NO_COLOR} ${error}"
 	}
 
-	error=$(cargo install serpl 2>&1) || {
-		echo -e "\n\t${RED}serpl installation failed:${NO_COLOR} ${error}"
+	error=$(cargo install gitui --locked 2>&1) || {
+		echo -e "\n\t${RED}gitui installation failed:${NO_COLOR} ${error}"
 	}
 }
 

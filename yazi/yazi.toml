@@ -1,2 +1,3 @@
 [manager]
+# FIXME: Yazi's right column has no enough space
 ratio = [1, 3, 4]

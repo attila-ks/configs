@@ -1,5 +1,7 @@
 theme = "catppuccin_mocha"
 
+# FIXME: Helix has different colors on WSL Ubuntu.
+
 [editor]
 true-color = true
 bufferline = "multiple"
@@ -20,17 +22,25 @@ render = true
 #################### Custom keybindings ####################
 [keys.normal.space]
 # TODO: Add keymap description.
+
 # Open the Yazi file manager in the root directory.
 e = [":new", ":insert-output tmux new-window -n yazi 'yazi'", ":buffer-close!", ":redraw"]
-# Open the Glow markdown viewer.
-m = [":new", ":insert-output tmux new-window -n glow 'glow'", ":buffer-close!", ":redraw"]
-# Open search and replace tool.
-C-f = [":new", ":insert-output tmux new-window -n serpl 'serpl'", ":buffer-close!", ":redraw"]
 
 [keys.normal]
+X = "select_line_above"
+
 # TODO: Move the following two keymaps to visual mode!
 # Move line(s) up.
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
 # Move line(s) down.
 C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+
+# Open the Glow markdown viewer.
+m = [":new", ":insert-output tmux new-window -n glow 'glow'", ":buffer-close!", ":redraw"]
+
+# Open search and replace tool.
+C-f = [":write-all", ":insert-output scooter >/dev/tty", ":redraw", ":reload-all"]
+
+# Open gitui.
+C-g = [":write-all", ":insert-output gitui >/dev/tty", ":redraw", ":reload-all"]
 ################# End of custom keybindings #################
