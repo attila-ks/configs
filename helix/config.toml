@@ -30,6 +30,7 @@ m = [":new", ":insert-output tmux new-window -n glow 'glow'", ":buffer-close!", 
 C-f = [":new", ":insert-output tmux new-window -n serpl 'serpl'", ":buffer-close!", ":redraw"]
 
 [keys.normal]
+X = "select_line_above"
 # TODO: Move the following two keymaps to visual mode!
 # Move line(s) up.
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
