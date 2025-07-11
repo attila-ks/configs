@@ -4,14 +4,12 @@
 # TODO: Check if packages are already installed.
 # TODO: Hide redundant outputs.
 # TODO: Install Markdown linter for Helix editor.
-# TODO: Consider using Scooter instead of Serpl for search and replace in Helix editor.
 # TODO: Add Copilot support for Helix editor.
 # TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
 # TODO: Add Rust support for Helix editor.
 # TODO: Consider to add a Git tool for Helix editor or terminal.
 # FIXME: ruff installation fails on Ubuntu
-# FIXME: serpl installation fails because of missing cargo
 # FIXME: Shell must be restarted after installing Rust.
 
 GREEN='\033[0;32m'
@@ -309,17 +307,12 @@ function install_fish_lsp() {
 }
 
 function install_search_and_replace_tool() {
-	echo -e "\n${GREEN}Installing Serpl (search and replace tool)...${NO_COLOR}"
+	echo -e "\n${GREEN}Installing Scooter (search and replace tool)...${NO_COLOR}"
 
 	local error
 
-	echo -e "\n\t${GREEN}Installing ripgrep dependency...${NO_COLOR}"
-	error=$(sudo $package_manager install -y ripgrep 2>&1) || {
-		echo -e "\n\t${RED}ripgrep installation failed:${NO_COLOR} ${error}"
-	}
-
-	error=$(cargo install serpl 2>&1) || {
-		echo -e "\n\t${RED}serpl installation failed:${NO_COLOR} ${error}"
+	error=$(cargo install scooter --locked 2>&1) || {
+		echo -e "\n\t${RED}Scooter installation failed:${NO_COLOR} ${error}"
 	}
 }
 
