@@ -12,6 +12,7 @@
 # TODO: Consider to add a Git tool for Helix editor or terminal.
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: serpl installation fails because of missing cargo
+# FIXME: Shell must be restarted after installing Rust.
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
