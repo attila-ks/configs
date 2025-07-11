@@ -8,6 +8,11 @@
 # TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
 # TODO: Add Rust support for Helix editor.
+# TODO: Add missing Helix debug adapters.
+# TODO: Add missing Helix formatters.
+# TODO: Add missing Helix Highlights.
+# TODO: Add missing Helix Textobjects.
+# TODO: Add missing Helix Indents.
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: Shell must be restarted after installing Rust.
 
