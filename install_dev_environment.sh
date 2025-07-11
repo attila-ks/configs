@@ -133,6 +133,8 @@ function install_helix_editor() {
 	install_cpp_tools
 	install_python_lsp
 	install_bash_lsp
+	install_html_css_json_eslint_lsp
+	install_javascript_typescript_lsp
 	install_search_and_replace_tool
 	install_gitui
 }
@@ -298,6 +300,26 @@ function install_bash_lsp() {
 
 	error=$(sudo npm install -g bash-language-server 2>&1) || {
 		echo -e "\n\t${RED}Bash LSP installation failed:${NO_COLOR} ${error}"
+	}
+}
+
+function install_html_css_json_eslint_lsp() {
+	echo -e "\n${GREEN}Installing HTML, CSS, JSON, ESLint LSPs...${NO_COLOR}"
+
+	local error
+
+	error=$(sudo npm i -g vscode-langservers-extracted 2>&1) || {
+		echo -e "\n\t${RED}LSPs installation failed:${NO_COLOR} ${error}"
+	}
+}
+
+function install_javascript_typescript_lsp() {
+	echo -e "\n${GREEN}Installing JavaScript, TypeScript LSPs...${NO_COLOR}"
+
+	local error
+
+	error=$(sudo npm install -g typescript-language-server typescript 2>&1) || {
+		echo -e "\n\t${RED}LSPs installation failed:${NO_COLOR} ${error}"
 	}
 }
 
