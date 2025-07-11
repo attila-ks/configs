@@ -8,7 +8,6 @@
 # TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
 # TODO: Add Rust support for Helix editor.
-# TODO: Consider to add a Git tool for Helix editor or terminal.
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: Shell must be restarted after installing Rust.
 
@@ -106,6 +105,7 @@ function install_helix_editor() {
 	install_bash_lsp
 	install_fish_lsp
 	install_search_and_replace_tool
+	install_gitui
 }
 
 function install_tmux() {
@@ -313,6 +313,21 @@ function install_search_and_replace_tool() {
 
 	error=$(cargo install scooter --locked 2>&1) || {
 		echo -e "\n\t${RED}Scooter installation failed:${NO_COLOR} ${error}"
+	}
+}
+
+function install_gitui() {
+	echo -e "\n${GREEN}Installing gitui...${NO_COLOR}"
+
+	local error
+
+	echo -e "\n\t${GREEN}Installing CMake dependency...${NO_COLOR}"
+	error=$(sudo $package_manager install -y cmake 2>&1) || {
+		echo -e "\n\t${RED}CMake installation failed:${NO_COLOR} ${error}"
+	}
+
+	error=$(cargo install gitui --locked 2>&1) || {
+		echo -e "\n\t${RED}gitui installation failed:${NO_COLOR} ${error}"
 	}
 }
 

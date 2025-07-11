@@ -36,4 +36,7 @@ X = "select_line_above"
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
 # Move line(s) down.
 C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+
+# Open gitui.
+C-g = [":write-all", ":insert-output gitui >/dev/tty", ":redraw", ":reload-all"]
 ################# End of custom keybindings #################
