@@ -16,5 +16,12 @@ set -Ux FZF_DEFAULT_OPTS "\
 
 alias cat="bat"
 
+# The alias is needed for the Helix editor to be able to open .html files in the browser on both Linux and WSL.
+if type -q explorer.exe
+    alias browser="explorer.exe"
+else
+    alias browser="xdg-open"
+end
+
 fish_add_path /home/"$USER"/.local/bin
 fish_add_path /home/"$USER"/.cargo/bin

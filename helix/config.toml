@@ -26,6 +26,10 @@ render = true
 # Open the Yazi file manager in the root directory.
 e = [":new", ":insert-output tmux new-window -n yazi 'yazi'", ":buffer-close!", ":redraw"]
 
+# Open the current .html file in the browser.
+# TODO: Make the script multiline.
+o = [":sh set bn %{buffer_name}; if test (string match -r '.html$' -- $bn); browser $bn; else; echo '%{buffer_name} is not a HTML file'; end"]
+
 [keys.normal]
 X = "select_line_above"
 
