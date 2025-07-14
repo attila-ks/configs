@@ -1,3 +1,5 @@
+# FIXME: HTML LSP doesn't show syntax errors.
+
 [[language]]
 name = "cpp"
 formatter = { command = "clang-format" }
