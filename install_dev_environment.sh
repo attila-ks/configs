@@ -5,7 +5,6 @@
 # TODO: Hide redundant outputs.
 # TODO: Install Markdown linter for Helix editor.
 # TODO: Add Copilot support for Helix editor.
-# TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
 # TODO: Add Rust support for Helix editor.
 # TODO: Add missing Helix debug adapters.
@@ -317,7 +316,7 @@ function install_toml_lsp() {
 
 	local error
 
-	error=$(sudo npm install -g @taplo/cli 2>&1) || {
+	error=$(cargo install taplo-cli --locked --features lsp 2>&1) || {
 		echo -e "\n\t${RED}TOML LSP installation failed:${NO_COLOR} ${error}"
 	}
 }
