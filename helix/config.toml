@@ -28,7 +28,7 @@ e = [":new", ":insert-output tmux new-window -n yazi 'yazi'", ":buffer-close!", 
 
 # Open the current .html file in the browser.
 # TODO: Make the script multiline.
-o = [":sh set bn %{buffer_name}; if test (string match -r '.html$' -- $bn); browser $bn; else; echo '%{buffer_name} is not a HTML file'; end"]
+o = [":echo %sh{set bn %{buffer_name}; if test (string match -r '.html$' -- $bn); browser $bn; else; echo '%{buffer_name} is not a HTML file'; end}"]
 
 [keys.normal]
 X = "select_line_above"
