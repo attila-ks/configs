@@ -36,7 +36,7 @@ C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_befor
 C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 
 # Open the Glow markdown viewer.
-m = [":new", ":insert-output tmux new-window -n glow 'glow'", ":buffer-close!", ":redraw"]
+C-m = [":new", ":insert-output tmux new-window -n glow 'glow'", ":buffer-close!", ":redraw"]
 
 # Open search and replace tool.
 C-f = [":write-all", ":insert-output scooter >/dev/tty", ":redraw", ":reload-all"]

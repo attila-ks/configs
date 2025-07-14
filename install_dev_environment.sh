@@ -5,7 +5,6 @@
 # TODO: Hide redundant outputs.
 # TODO: Install Markdown linter for Helix editor.
 # TODO: Add Copilot support for Helix editor.
-# TODO: Add TOML LSP support for Helix editor.
 # TODO: Add Harper spell checker support for Helix editor.
 # TODO: Remove the package manager switch-case statements.
 # TODO: Add Catch2 test runner support for Helix editor or terminal.
@@ -135,6 +134,7 @@ function install_helix_editor() {
 	install_bash_lsp
 	install_html_css_json_eslint_lsp
 	install_javascript_typescript_lsp
+	install_toml_lsp
 	install_search_and_replace_tool
 	install_gitui
 }
@@ -320,6 +320,16 @@ function install_javascript_typescript_lsp() {
 
 	error=$(sudo npm install -g typescript-language-server typescript 2>&1) || {
 		echo -e "\n\t${RED}LSPs installation failed:${NO_COLOR} ${error}"
+	}
+}
+
+function install_toml_lsp() {
+	echo -e "\n${GREEN}Installing TOML LSP...${NO_COLOR}"
+
+	local error
+
+	error=$(cargo install taplo-cli --locked --features lsp 2>&1) || {
+		echo -e "\n\t${RED}TOML LSP installation failed:${NO_COLOR} ${error}"
 	}
 }
 
