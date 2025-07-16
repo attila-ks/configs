@@ -15,6 +15,7 @@ set -Ux FZF_DEFAULT_OPTS "\
 --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
 alias cat="bat"
+alias tp="trash-put"
 
 # The alias is needed for the Helix editor to be able to open .html files in the browser on both Linux and WSL.
 if type -q explorer.exe
