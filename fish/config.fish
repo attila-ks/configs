@@ -15,6 +15,7 @@ set -Ux FZF_DEFAULT_OPTS "\
 --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
 alias cat="bat"
+alias tp="trash-put"
 
 fish_add_path /home/"$USER"/.local/bin
 fish_add_path /home/"$USER"/.cargo/bin
