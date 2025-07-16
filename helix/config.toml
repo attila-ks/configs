@@ -13,8 +13,22 @@ shell = ["fish", "-c"]
 hidden = false
 
 [editor.statusline]
-left = ["mode", "version-control", "spinner", "file-name", "read-only-indicator", "file-modification-indicator"]
-right = ["diagnostics", "selections", "register", "position", "file-encoding", "file-line-ending"]
+left = [
+  "mode",
+  "version-control",
+  "spinner",
+  "file-name",
+  "read-only-indicator",
+  "file-modification-indicator",
+]
+right = [
+  "diagnostics",
+  "selections",
+  "register",
+  "position",
+  "file-encoding",
+  "file-line-ending",
+]
 
 [editor.indent-guides]
 render = true
@@ -31,15 +45,30 @@ X = "select_line_above"
 
 # TODO: Move the following two keymaps to visual mode!
 # Move line(s) up.
-C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+C-k = [
+  "extend_to_line_bounds",
+  "delete_selection",
+  "move_line_up",
+  "paste_before",
+]
 # Move line(s) down.
 C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 
 # Open the Glow markdown viewer.
-C-m = [":new", ":insert-output tmux new-window -n glow 'glow'", ":buffer-close!", ":redraw"]
+C-m = [
+  ":new",
+  ":insert-output tmux new-window -n glow 'glow'",
+  ":buffer-close!",
+  ":redraw",
+]
 
 # Open search and replace tool.
-C-f = [":write-all", ":insert-output scooter >/dev/tty", ":redraw", ":reload-all"]
+C-f = [
+  ":write-all",
+  ":insert-output scooter >/dev/tty",
+  ":redraw",
+  ":reload-all",
+]
 
 # Open gitui.
 C-g = [":write-all", ":insert-output gitui >/dev/tty", ":redraw", ":reload-all"]
