@@ -51,25 +51,6 @@ function install_git() {
 	ln -s "$(pwd)"/git/.gitconfig "$HOME"/
 }
 
-function install_yazi_file_manager() {
-	echo -e "\n${GREEN}Installing Yazi file manager...${NO_COLOR}"
-
-	local error
-
-	echo -e "\n\t${GREEN}Installing optional extensions...${NO_COLOR}"
-
-	error=$(sudo $package_manager install -y jq poppler fd rg 2>&1) || {
-		echo -e "\n\t\t${RED}Optional extension(s) installation failed:${NO_COLOR} ${error}"
-	}
-
-	error=$(cargo install --locked yazi-fm yazi-cli 2>&1) || {
-		echo -e "\n\t${RED}Yazi installation failed:${NO_COLOR} ${error}"
-	}
-
-	ln -s "$(pwd)"/yazi/yazi.toml /home/"$USER"/.config/yazi/
-	ln -s "$(pwd)"/fish/functions/y.fish /home/"$USER"/.config/fish/functions/
-}
-
 function install_bat() {
 	echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
 
@@ -103,7 +84,6 @@ function install_helix_editor() {
 	ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
 
 	install_rust_toolchain
-	install_yazi_file_manager
 	install_glow
 	install_python_lsp
 	install_bash_lsp

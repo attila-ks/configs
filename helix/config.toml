@@ -37,9 +37,6 @@ render = true
 [keys.normal.space]
 # TODO: Add keymap description.
 
-# Open the Yazi file manager in the root directory.
-e = [":new", ":insert-output tmux new-window -n yazi 'yazi'", ":buffer-close!", ":redraw"]
-
 [keys.normal]
 X = "select_line_above"
 
