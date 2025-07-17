@@ -1,7 +1,5 @@
 theme = "catppuccin_mocha"
 
-# FIXME: Helix has different colors on WSL Ubuntu.
-
 [editor]
 true-color = true
 bufferline = "multiple"
