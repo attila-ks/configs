@@ -113,6 +113,7 @@ function install_helix_editor() {
 	install_python_lsp
 	install_bash_lsp
 	install_html_css_json_eslint_lsp
+	install_html_lsp
 	install_javascript_typescript_lsp
 	install_toml_lsp
 	install_search_and_replace_tool
@@ -291,6 +292,23 @@ function install_html_css_json_eslint_lsp() {
 	error=$(sudo npm i -g vscode-langservers-extracted 2>&1) || {
 		echo -e "\n\t${RED}LSPs installation failed:${NO_COLOR} ${error}"
 	}
+}
+
+# The HTML LSP which comes with `vscode-langservers-extracted` doesn't show diagnostic errors.
+function install_html_lsp() {
+	echo -e "\n${GREEN}Installing HTML LSP...${NO_COLOR}"
+
+	# Get latest release tag from GitHub API
+	latest_tag=$(curl -s https://api.github.com/repos/kristoff-it/superhtml/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+
+	# Construct download URL for x86_64-linux-musl
+	url="https://github.com/kristoff-it/superhtml/releases/download/${latest_tag}/x86_64-linux-musl.tar.gz"
+
+	# Download and extract
+	curl -L "$url" -o superhtml.tar.gz
+	tar -xzf superhtml.tar.gz
+	sudo mv ./x86_64-linux-musl/superhtml /usr/local/bin/
+	rm superhtml.tar.gz
 }
 
 function install_javascript_typescript_lsp() {
