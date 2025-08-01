@@ -11,8 +11,15 @@
 # TODO: Add missing Helix Highlights.
 # TODO: Add missing Helix Textobjects.
 # TODO: Add missing Helix Indents.
+# TODO: Build Helix from source.
 # FIXME: ruff installation fails on Ubuntu
+# FIXME: Cannot check if TOML LSP is installed because maybe its name is different.
 # FIXME: Shell must be restarted after installing Rust.
+# FIXME: Cannot install Scooter
+# FIXME: npm command not found on Ubuntu
+# FIXME: Helix is available only in snap on Ubuntu
+# FIXME: fish command not found error on Ubuntu
+# FIXME: Switching between master and work branches breaks the colorsceme of the terminal on both Linux and WSL.
 
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
