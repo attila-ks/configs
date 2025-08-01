@@ -18,7 +18,7 @@
         <key>settings</key>
         <dict>
           <key>background</key>
-          <string>#1e1e2e</string>
+          <string>#222222</string>
           <key>foreground</key>
           <string>#cdd6f4</string>
           <key>caret</key>
@@ -32,7 +32,7 @@
           <key>selection</key>
           <string>#9399b240</string>
           <key>activeGuide</key>
-          <string>#45475a</string>
+          <string>#4b4b4b</string>
           <key>findHighlight</key>
           <string>#3e5767</string>
           <key>gutterForeground</key>

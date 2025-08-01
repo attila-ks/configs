@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # TODO: Exit functions on error.
-# TODO: Check if packages are already installed.
 # TODO: Hide redundant outputs.
 # TODO: Install Markdown linter for Helix editor.
 # TODO: Add Copilot support for Helix editor.
@@ -18,14 +17,34 @@
 # TODO: Add missing Helix Highlights.
 # TODO: Add missing Helix Textobjects.
 # TODO: Add missing Helix Indents.
+# TODO: Build Helix from source.
+# TODO: Update tmux's Catppuccin theme too.
 # FIXME: ruff installation fails on Ubuntu
+# FIXME: Cannot check if TOML LSP is installed because maybe its name is different.
 # FIXME: Shell must be restarted after installing Rust.
+# FIXME: Cannot install Scooter
+# FIXME: npm command not found on Ubuntu
+# FIXME: Helix is available only in snap on Ubuntu
+# FIXME: fish command not found error on Ubuntu
+# FIXME: Switching between master and work branches breaks the colorsceme of the terminal on both Linux and WSL.
 
 GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NO_COLOR='\033[0m'
 
 package_manager=""
+postinstall_manual_steps=""
+
+function is_package_installed() {
+	local pkg="$1"
+
+	if command -v "$pkg" >/dev/null 2>&1; then
+		return 0
+	else
+		return 1
+	fi
+}
 
 function detect_installed_package_manager() {
 	echo -e "\n${GREEN}Detecting installed package manager...${NO_COLOR}"
@@ -45,35 +64,41 @@ function detect_installed_package_manager() {
 }
 
 function install_git() {
-	echo -e "\n${GREEN}Installing Git...${NO_COLOR}"
+	if ! is_package_installed git; then
+		echo -e "\n${GREEN}Installing Git...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(sudo $package_manager install -y git 2>&1) || {
-		echo -e "\n\t${RED}Git installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(sudo $package_manager install -y git 2>&1) || {
+			echo -e "\n\t${RED}Git installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 
-	# FIXME: The following command fails because .gitconfig is added to .gitignore
-	ln -s "$(pwd)"/git/.gitconfig "$HOME"/
+	postinstall_manual_steps+="\n\t- Configure your Git user name and email address\n"
 }
 
 function install_bat() {
-	echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
+	if ! is_package_installed bat; then
+		echo -e "\n${GREEN}Installing bat (an alternative to cat)...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(sudo $package_manager install -y bat 2>&1) || {
-		echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(sudo $package_manager install -y bat 2>&1) || {
+			echo -e "\n\t${RED}bat installation failed:${NO_COLOR} ${error}"
+		}
 
-	local bat="bat"
+		local bat="bat"
 
-	if [ $package_manager = "apt" ]; then
-		bat="batcat"
-		fish -c 'alias --save bat=batcat'
+		if [ $package_manager = "apt" ]; then
+			bat="batcat"
+			fish -c 'alias --save bat=batcat'
+		fi
 	fi
 
-	ln -s "$(pwd)"/bat /home/"$USER"/.config/
+	if [ ! -d /home/"$USER"/.config/bat ]; then
+		ln -s "$(pwd)"/bat /home/"$USER"/.config/
+	fi
+
 	$bat cache --build
 }
 
@@ -96,16 +121,25 @@ function install_cpp_tools() {
 }
 
 function install_helix_editor() {
-	echo -e "\n${GREEN}Installing Helix editor...${NO_COLOR}"
+	if ! is_package_installed hx; then
+		echo -e "\n${GREEN}Installing Helix editor...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(sudo $package_manager install -y helix 2>&1) || {
-		echo -e "\n\t${RED}Helix installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(sudo $package_manager install -y helix 2>&1) || {
+			echo -e "\n\t${RED}Helix installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 
-	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
-	ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
+	if [ ! -e /home/"$USER"/.config/helix/config.toml ]; then
+		ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
+	fi
+	if [ ! -e /home/"$USER"/.config/helix/languages.toml ]; then
+		ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
+	fi
+	if [ ! -d /home/"$USER"/.config/helix/themes ]; then
+		ln -s "$(pwd)"/helix/themes /home/"$USER"/.config/helix/
+	fi
 
 	install_rust_toolchain
 	install_glow
@@ -121,15 +155,19 @@ function install_helix_editor() {
 }
 
 function install_tmux() {
-	echo -e "\n${GREEN}Installing tmux...${NO_COLOR}"
+	if ! is_package_installed tmux; then
+		echo -e "\n${GREEN}Installing tmux...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(sudo $package_manager install -y tmux 2>&1) || {
-		echo -e "\n\t${RED}Tmux installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(sudo $package_manager install -y tmux 2>&1) || {
+			echo -e "\n\t${RED}Tmux installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 
-	ln -s "$(pwd)"/tmux/.tmux.conf /home/"$USER"/
+	if [ ! -e /home/"$USER"/.tmux.conf ]; then
+		ln -s "$(pwd)"/tmux/.tmux.conf /home/"$USER"/
+	fi
 
 	if [ ! -d "/home/$USER/.config/tmux/plugins" ]; then
 		mkdir -p /home/"$USER"/.config/tmux/plugins
@@ -139,52 +177,70 @@ function install_tmux() {
 }
 
 function install_starship_prompt() {
-	echo -e "\n${GREEN}Installing Starship prompt...${NO_COLOR}"
+	if ! is_package_installed starship; then
+		echo -e "\n${GREEN}Installing Starship prompt...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(curl -sS https://starship.rs/install.sh | sh -s -- --yes 2>&1) || {
-		echo -e "\n\t${RED}Starship prompt installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(curl -sS https://starship.rs/install.sh | sh -s -- --yes 2>&1) || {
+			echo -e "\n\t${RED}Starship prompt installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 
-	ln -s "$(pwd)"/starship.toml /home/"$USER"/.config/
+	if [ ! -e /home/"$USER"/.config/starship.toml ]; then
+		ln -s "$(pwd)"/starship.toml /home/"$USER"/.config/
+	fi
 }
 
 function install_fzf() {
-	echo -e "\n${GREEN}Installing fzf...${NO_COLOR}"
+	if ! is_package_installed fzf; then
+		echo -e "\n${GREEN}Installing fzf...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(sudo $package_manager install -y fzf 2>&1) || {
-		echo -e "\n\t${RED}fzf installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(sudo $package_manager install -y fzf 2>&1) || {
+			echo -e "\n\t${RED}fzf installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_trash_cli() {
-	echo -e "\n${GREEN}Installing trash-cli...${NO_COLOR}"
+	if ! is_package_installed trash; then
+		echo -e "\n${GREEN}Installing trash-cli...${NO_COLOR}"
 
-	echo -e "\n\t${GREEN}Installing pipx dependency...${NO_COLOR}"
-	local error
+		local error
 
-	error=$(sudo $package_manager install -y pipx 2>&1) || {
-		echo -e "\n\t\t${RED}pipx installation failed:${NO_COLOR} ${error}"
-	}
+		if ! is_package_installed pipx; then
+			echo -e "\n\t${GREEN}Installing pipx dependency...${NO_COLOR}"
 
-	pipx ensurepath
+			error=$(sudo $package_manager install -y pipx 2>&1) || {
+				echo -e "\n\t\t${RED}pipx installation failed:${NO_COLOR} ${error}"
+			}
 
-	error=$(pipx install trash-cli 2>&1) || {
-		echo -e "\n\t${RED}trash-cli installation failed:${NO_COLOR} ${error}"
-	}
+			pipx ensurepath
+		fi
+
+		error=$(pipx install trash-cli 2>&1) || {
+			echo -e "\n\t${RED}trash-cli installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_fish_shell() {
-	echo -e "\n${GREEN}Installing fish shell...${NO_COLOR}"
+	if ! is_package_installed fish; then
+		echo -e "\n${GREEN}Installing fish shell...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(sudo $package_manager install -y fish 2>&1) || {
-		echo -e "\n\t${RED}Fish shell installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(sudo $package_manager install -y fish 2>&1) || {
+			echo -e "\n\t${RED}Fish shell installation failed:${NO_COLOR} ${error}"
+		}
+
+		# Disables fish's welcome message.
+		fish -c 'set -U fish_greeting'
+		# Sets the Fish shell as the default shell.
+		chsh -s /usr/bin/fish
+	fi
 
 	if [ ! -d /home/"$USER"/.config/fish ]; then
 		mkdir /home/"$USER"/.config/fish
@@ -192,22 +248,24 @@ function install_fish_shell() {
 		trash-put /home/"$USER"/.config/fish/config.fish
 	fi
 
-	ln -s "$(pwd)"/fish/config.fish /home/"$USER"/.config/fish/
-	ln -s "$(pwd)"/fish/themes /home/"$USER"/.config/fish/
-	# Disables fish's welcome message.
-	fish -c 'set -U fish_greeting'
-	# Sets the Fish shell as the default shell.
-	chsh -s /usr/bin/fish
+	if [ ! -e /home/"$USER"/.config/fish/config.fish ]; then
+		ln -s "$(pwd)"/fish/config.fish /home/"$USER"/.config/fish/
+	fi
+	if [ ! -e /home/"$USER"/.config/fish/themes ]; then
+		ln -s "$(pwd)"/fish/themes /home/"$USER"/.config/fish/
+	fi
 }
 
 function install_zoxide() {
-	echo -e "\n${GREEN}Installing zoxide...${NO_COLOR}"
+	if ! is_package_installed zoxide; then
+		echo -e "\n${GREEN}Installing zoxide...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(sudo $package_manager install -y zoxide 2>&1) || {
-		echo -e "\n\t${RED}zoxide installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(sudo $package_manager install -y zoxide 2>&1) || {
+			echo -e "\n\t${RED}zoxide installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_font() {
@@ -227,67 +285,82 @@ function install_font() {
 }
 
 function install_tealdeer() {
-	echo -e "\n${GREEN}Installing tealdeer...${NO_COLOR}"
+	if ! is_package_installed tldr; then
+		echo -e "\n${GREEN}Installing tealdeer...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(sudo $package_manager install -y tealdeer 2>&1) || {
-		echo -e "\n\t${RED}tealdeer installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(sudo $package_manager install -y tealdeer 2>&1) || {
+			echo -e "\n\t${RED}tealdeer installation failed:${NO_COLOR} ${error}"
+		}
 
-	echo -e "\n${GREEN}Updating tealdeer cache...${NO_COLOR}"
-	tldr --update
+		echo -e "\n${GREEN}Updating tealdeer cache...${NO_COLOR}"
+		tldr --update
+	fi
 }
 
 function install_glow() {
-	echo -e "\n${GREEN}Installing Glow markdown reader...${NO_COLOR}"
+	if ! is_package_installed glow; then
+		echo -e "\n${GREEN}Installing Glow markdown reader...${NO_COLOR}"
 
-	local error
+		local error
 
-	if [ $package_manager = "apt" ]; then
-		error=$(sudo snap install -y glow 2>&1) || {
-			echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
-		}
-	else
-		error=$(sudo $package_manager install -y glow 2>&1) || {
-			echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
-		}
+		if [ $package_manager = "apt" ]; then
+			error=$(sudo snap install -y glow 2>&1) || {
+				echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
+			}
+		else
+			error=$(sudo $package_manager install -y glow 2>&1) || {
+				echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
+			}
+		fi
 	fi
 }
 
 function install_python_lsp() {
-	echo -e "\n${GREEN}Installing ruff Python LSP...${NO_COLOR}"
+	if ! is_package_installed ruff; then
+		echo -e "\n${GREEN}Installing ruff Python LSP...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(pip install ruff 2>&1) || {
-		echo -e "\n\t${RED}ruff installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(pip install ruff 2>&1) || {
+			echo -e "\n\t${RED}ruff installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_bash_lsp() {
-	echo -e "\n${GREEN}Installing Bash LSP...${NO_COLOR}"
+	if ! is_package_installed bash-language-server; then
+		echo -e "\n${GREEN}Installing Bash LSP...${NO_COLOR}"
 
-	local error
+		local error
 
-	echo -e "\n\t${GREEN}Installing shellcheck dependency...${NO_COLOR}"
-	error=$(sudo $package_manager install -y shellcheck 2>&1) || {
-		echo -e "\n\t${RED}shellcheck installation failed:${NO_COLOR} ${error}"
-	}
-	echo -e "\n\t${GREEN}Installing npm dependency...${NO_COLOR}"
-	error=$(sudo $package_manager install -y npm 2>&1) || {
-		echo -e "\n\t${RED}npm installation failed:${NO_COLOR} ${error}"
-	}
+		if ! is_package_installed shellcheck; then
+			echo -e "\n\t${GREEN}Installing shellcheck dependency...${NO_COLOR}"
 
-	error=$(sudo npm install -g bash-language-server 2>&1) || {
-		echo -e "\n\t${RED}Bash LSP installation failed:${NO_COLOR} ${error}"
-	}
+			error=$(sudo $package_manager install -y shellcheck 2>&1) || {
+				echo -e "\n\t${RED}shellcheck installation failed:${NO_COLOR} ${error}"
+			}
+		fi
+
+		if ! is_package_installed npm; then
+			echo -e "\n\t${GREEN}Installing npm dependency...${NO_COLOR}"
+
+			error=$(sudo $package_manager install -y npm 2>&1) || {
+				echo -e "\n\t${RED}npm installation failed:${NO_COLOR} ${error}"
+			}
+		fi
+
+		error=$(sudo npm install -g bash-language-server 2>&1) || {
+			echo -e "\n\t${RED}Bash LSP installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_html_css_json_eslint_lsp() {
 	echo -e "\n${GREEN}Installing HTML, CSS, JSON, ESLint LSPs...${NO_COLOR}"
 
-	local error
+		local error
 
 	error=$(sudo npm i -g vscode-langservers-extracted 2>&1) || {
 		echo -e "\n\t${RED}LSPs installation failed:${NO_COLOR} ${error}"
@@ -322,50 +395,61 @@ function install_javascript_typescript_lsp() {
 }
 
 function install_toml_lsp() {
-	echo -e "\n${GREEN}Installing TOML LSP...${NO_COLOR}"
+	if ! is_package_installed taplo; then
+		echo -e "\n${GREEN}Installing TOML LSP...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(cargo install taplo-cli --locked --features lsp 2>&1) || {
-		echo -e "\n\t${RED}TOML LSP installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(cargo install taplo-cli --locked --features lsp 2>&1) || {
+			echo -e "\n\t${RED}TOML LSP installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_search_and_replace_tool() {
-	echo -e "\n${GREEN}Installing Scooter (search and replace tool)...${NO_COLOR}"
+	if ! is_package_installed scooter; then
+		echo -e "\n${GREEN}Installing Scooter (search and replace tool)...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(cargo install scooter --locked 2>&1) || {
-		echo -e "\n\t${RED}Scooter installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(cargo install scooter --locked 2>&1) || {
+			echo -e "\n\t${RED}Scooter installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_gitui() {
-	echo -e "\n${GREEN}Installing gitui...${NO_COLOR}"
+	if ! is_package_installed gitui; then
+		echo -e "\n${GREEN}Installing gitui...${NO_COLOR}"
 
-	local error
+		local error
 
-	echo -e "\n\t${GREEN}Installing CMake dependency...${NO_COLOR}"
-	error=$(sudo $package_manager install -y cmake 2>&1) || {
-		echo -e "\n\t${RED}CMake installation failed:${NO_COLOR} ${error}"
-	}
+		if ! is_package_installed cmake; then
+			echo -e "\n\t${GREEN}Installing CMake dependency...${NO_COLOR}"
 
-	error=$(cargo install gitui --locked 2>&1) || {
-		echo -e "\n\t${RED}gitui installation failed:${NO_COLOR} ${error}"
-	}
+			error=$(sudo $package_manager install -y cmake 2>&1) || {
+				echo -e "\n\t${RED}CMake installation failed:${NO_COLOR} ${error}"
+			}
+		fi
+
+		error=$(cargo install gitui --locked 2>&1) || {
+			echo -e "\n\t${RED}gitui installation failed:${NO_COLOR} ${error}"
+		}
+	fi
 }
 
 function install_rust_toolchain() {
-	echo -e "\n${GREEN}Installing Rust toolchain...${NO_COLOR}"
+	if ! is_package_installed rustup; then
+		echo -e "\n${GREEN}Installing Rust toolchain...${NO_COLOR}"
 
-	local error
+		local error
 
-	error=$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y 2>&1) || {
-		echo -e "\n\t${RED}Rust toolchain installation failed:${NO_COLOR} ${error}"
-	}
+		error=$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y 2>&1) || {
+			echo -e "\n\t${RED}Rust toolchain installation failed:${NO_COLOR} ${error}"
+		}
 
-	rustup update
+		rustup update
+	fi
 }
 
 detect_installed_package_manager
@@ -380,3 +464,5 @@ install_trash_cli
 install_tealdeer
 install_fish_shell
 install_helix_editor
+
+echo -e "\n${YELLOW}Post-installation manual steps:${NO_COLOR}${postinstall_manual_steps}"
