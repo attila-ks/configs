@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # TODO: Exit functions on error.
-# TODO: Check if packages are already installed.
 # TODO: Hide redundant outputs.
 # TODO: Install Markdown linter for Helix editor.
 # TODO: Add Copilot support for Helix editor.
@@ -82,7 +81,10 @@ function install_bat() {
 		fi
 	fi
 
-	ln -s "$(pwd)"/bat /home/"$USER"/.config/
+	if [ ! -d /home/"$USER"/.config/bat ]; then
+		ln -s "$(pwd)"/bat /home/"$USER"/.config/
+	fi
+
 	$bat cache --build
 }
 
@@ -97,8 +99,12 @@ function install_helix_editor() {
 		}
 	fi
 
-	ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
-	ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
+	if [ ! -e /home/"$USER"/.config/helix/config.toml ]; then
+		ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
+	fi
+	if [ ! -e /home/"$USER"/.config/helix/languages.toml ]; then
+		ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
+	fi
 
 	install_rust_toolchain
 	install_glow
@@ -121,7 +127,9 @@ function install_tmux() {
 		}
 	fi
 
-	ln -s "$(pwd)"/tmux/.tmux.conf /home/"$USER"/
+	if [ ! -e /home/"$USER"/.tmux.conf ]; then
+		ln -s "$(pwd)"/tmux/.tmux.conf /home/"$USER"/
+	fi
 
 	if [ ! -d "/home/$USER/.config/tmux/plugins" ]; then
 		mkdir -p /home/"$USER"/.config/tmux/plugins
@@ -141,7 +149,9 @@ function install_starship_prompt() {
 		}
 	fi
 
-	ln -s "$(pwd)"/starship.toml /home/"$USER"/.config/
+	if [ ! -e /home/"$USER"/.config/starship.toml ]; then
+		ln -s "$(pwd)"/starship.toml /home/"$USER"/.config/
+	fi
 }
 
 function install_fzf() {
@@ -200,8 +210,12 @@ function install_fish_shell() {
 		trash-put /home/"$USER"/.config/fish/config.fish
 	fi
 
-	ln -s "$(pwd)"/fish/config.fish /home/"$USER"/.config/fish/
-	ln -s "$(pwd)"/fish/themes /home/"$USER"/.config/fish/
+	if [ ! -e /home/"$USER"/.config/fish/config.fish ]; then
+		ln -s "$(pwd)"/fish/config.fish /home/"$USER"/.config/fish/
+	fi
+	if [ ! -e /home/"$USER"/.config/fish/themes ]; then
+		ln -s "$(pwd)"/fish/themes /home/"$USER"/.config/fish/
+	fi
 }
 
 function install_zoxide() {
@@ -247,7 +261,10 @@ function install_alacritty() {
 		mkdir /home/"$USER"/.config/alacritty
 	fi
 
-	ln -s "$(pwd)"/alacritty/alacritty.toml /home/"$USER"/.config/alacritty/
+	if [ ! -e /home/"$USER"/.config/alacritty/alacritty.toml ]; then
+		ln -s "$(pwd)"/alacritty/alacritty.toml /home/"$USER"/.config/alacritty/
+	fi
+
 	mkdir /home/"$USER"/.config/alacritty/themes
 	cd /home/"$USER"/.config/alacritty/themes
 	error=$(curl -LO https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml 2>&1) || {
