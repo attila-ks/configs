@@ -12,6 +12,7 @@
 # TODO: Add missing Helix Textobjects.
 # TODO: Add missing Helix Indents.
 # TODO: Build Helix from source.
+# TODO: Update tmux's Catppuccin theme too.
 # FIXME: ruff installation fails on Ubuntu
 # FIXME: Cannot check if TOML LSP is installed because maybe its name is different.
 # FIXME: Shell must be restarted after installing Rust.
@@ -111,6 +112,9 @@ function install_helix_editor() {
 	fi
 	if [ ! -e /home/"$USER"/.config/helix/languages.toml ]; then
 		ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
+	fi
+	if [ ! -d /home/"$USER"/.config/helix/themes ]; then
+		ln -s "$(pwd)"/helix/themes /home/"$USER"/.config/helix/
 	fi
 
 	install_rust_toolchain
@@ -272,12 +276,13 @@ function install_alacritty() {
 		ln -s "$(pwd)"/alacritty/alacritty.toml /home/"$USER"/.config/alacritty/
 	fi
 
-	mkdir /home/"$USER"/.config/alacritty/themes
-	cd /home/"$USER"/.config/alacritty/themes
-	error=$(curl -LO https://github.com/catppuccin/alacritty/raw/main/catppuccin-mocha.toml 2>&1) || {
-		echo -e "\n\t${RED}Downloading Alacritty theme failed:${NO_COLOR} ${error}"
-	}
-	cd -
+	if [ ! -d /home/"$USER"/.config/alacritty/themes ]; then
+		mkdir /home/"$USER"/.config/alacritty/themes
+	fi
+
+	if [ ! -e /home/"$USER"/.config/alacritty/themes/catppuccin-mocha.toml ]; then
+		ln -s "$(pwd)"/alacritty/catppuccin-mocha.toml /home/"$USER"/.config/alacritty/themes/
+	fi
 }
 
 function install_tealdeer() {

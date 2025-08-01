@@ -1,4 +1,4 @@
-theme = "catppuccin_mocha"
+theme = "custom_catppuccin_mocha"
 
 [editor]
 true-color = true
@@ -49,6 +49,7 @@ C-k = [
 # Move line(s) down.
 C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
 
+# TODO: If the current buffer is an .md file, then open this file in Glow (either fullscreen or side by side).
 # Open the Glow markdown viewer.
 C-m = [
   ":new",
