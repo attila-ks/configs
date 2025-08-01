@@ -16,10 +16,12 @@
 # FIXME: Shell must be restarted after installing Rust.
 
 GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NO_COLOR='\033[0m'
 
 package_manager=""
+postinstall_manual_steps=""
 
 function is_package_installed() {
 	local pkg="$1"
@@ -59,8 +61,7 @@ function install_git() {
 		}
 	fi
 
-	# FIXME: The following command fails because .gitconfig is added to .gitignore
-	ln -s "$(pwd)"/git/.gitconfig "$HOME"/
+	postinstall_manual_steps+="\n\t- Configure your Git user name and email address\n"
 }
 
 function install_bat() {
@@ -413,3 +414,5 @@ install_alacritty
 install_tealdeer
 install_fish_shell
 install_helix_editor
+
+echo -e "\n${YELLOW}Post-installation manual steps:${NO_COLOR}${postinstall_manual_steps}"
