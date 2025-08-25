@@ -2,23 +2,9 @@
 
 # TODO: Exit functions on error.
 # TODO: Hide redundant outputs.
-# TODO: Install Markdown linter for Helix editor.
-# TODO: Add Copilot support for Helix editor.
-# TODO: Add Harper spell checker support for Helix editor.
-# TODO: Add Rust support for Helix editor.
-# TODO: Add missing Helix debug adapters.
-# TODO: Add missing Helix formatters.
-# TODO: Add missing Helix Highlights.
-# TODO: Add missing Helix Textobjects.
-# TODO: Add missing Helix Indents.
-# TODO: Build Helix from source.
 # TODO: Update tmux's Catppuccin theme too.
-# FIXME: ruff installation fails on Ubuntu
-# FIXME: Cannot check if TOML LSP is installed because maybe its name is different.
 # FIXME: Shell must be restarted after installing Rust.
-# FIXME: Cannot install Scooter
 # FIXME: npm command not found on Ubuntu
-# FIXME: Helix is available only in snap on Ubuntu
 # FIXME: fish command not found error on Ubuntu
 # FIXME: Switching between master and work branches breaks the colorsceme of the terminal on both Linux and WSL.
 
@@ -94,37 +80,6 @@ function install_bat() {
 	fi
 
 	$bat cache --build
-}
-
-function install_helix_editor() {
-	if ! is_package_installed hx; then
-		echo -e "\n${GREEN}Installing Helix editor...${NO_COLOR}"
-
-		local error
-
-		error=$(sudo $package_manager install -y helix 2>&1) || {
-			echo -e "\n\t${RED}Helix installation failed:${NO_COLOR} ${error}"
-		}
-	fi
-
-	if [ ! -e /home/"$USER"/.config/helix/config.toml ]; then
-		ln -s "$(pwd)"/helix/config.toml /home/"$USER"/.config/helix/
-	fi
-	if [ ! -e /home/"$USER"/.config/helix/languages.toml ]; then
-		ln -s "$(pwd)"/helix/languages.toml /home/"$USER"/.config/helix/
-	fi
-	if [ ! -d /home/"$USER"/.config/helix/themes ]; then
-		ln -s "$(pwd)"/helix/themes /home/"$USER"/.config/helix/
-	fi
-
-	install_rust_toolchain
-	install_glow
-	install_python_lsp
-	install_bash_lsp
-	install_fish_lsp
-	install_toml_lsp
-	install_search_and_replace_tool
-	install_gitui
 }
 
 function install_tmux() {
@@ -300,136 +255,6 @@ function install_tealdeer() {
 	fi
 }
 
-function install_glow() {
-	if ! is_package_installed glow; then
-		echo -e "\n${GREEN}Installing Glow markdown reader...${NO_COLOR}"
-
-		local error
-
-		if [ $package_manager = "apt" ]; then
-			error=$(sudo snap install -y glow 2>&1) || {
-				echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
-			}
-		else
-			error=$(sudo $package_manager install -y glow 2>&1) || {
-				echo -e "\n\t${RED}Glow installation failed:${NO_COLOR} ${error}"
-			}
-		fi
-	fi
-}
-
-function install_python_lsp() {
-	if ! is_package_installed ruff; then
-		echo -e "\n${GREEN}Installing ruff Python LSP...${NO_COLOR}"
-
-		local error
-
-		error=$(pip install ruff 2>&1) || {
-			echo -e "\n\t${RED}ruff installation failed:${NO_COLOR} ${error}"
-		}
-	fi
-}
-
-function install_bash_lsp() {
-	if ! is_package_installed bash-language-server; then
-		echo -e "\n${GREEN}Installing Bash LSP...${NO_COLOR}"
-
-		local error
-
-		if ! is_package_installed shellcheck; then
-			echo -e "\n\t${GREEN}Installing shellcheck dependency...${NO_COLOR}"
-
-			error=$(sudo $package_manager install -y shellcheck 2>&1) || {
-				echo -e "\n\t${RED}shellcheck installation failed:${NO_COLOR} ${error}"
-			}
-		fi
-
-		if ! is_package_installed npm; then
-			echo -e "\n\t${GREEN}Installing npm dependency...${NO_COLOR}"
-
-			error=$(sudo $package_manager install -y npm 2>&1) || {
-				echo -e "\n\t${RED}npm installation failed:${NO_COLOR} ${error}"
-			}
-		fi
-
-		error=$(sudo npm install -g bash-language-server 2>&1) || {
-			echo -e "\n\t${RED}Bash LSP installation failed:${NO_COLOR} ${error}"
-		}
-	fi
-}
-
-function install_fish_lsp() {
-	if ! is_package_installed fish-lsp; then
-		echo -e "\n${GREEN}Installing Fish LSP...${NO_COLOR}"
-
-		local error
-
-		error=$(sudo npm install -g fish-lsp 2>&1) || {
-			echo -e "\n\t${RED}Fish LSP installation failed:${NO_COLOR} ${error}"
-		}
-	fi
-
-	fish-lsp complete >~/.config/fish/completions/fish-lsp.fish
-}
-
-function install_toml_lsp() {
-	if ! is_package_installed taplo; then
-		echo -e "\n${GREEN}Installing TOML LSP...${NO_COLOR}"
-
-		local error
-
-		error=$(cargo install taplo-cli --locked --features lsp 2>&1) || {
-			echo -e "\n\t${RED}TOML LSP installation failed:${NO_COLOR} ${error}"
-		}
-	fi
-}
-
-function install_search_and_replace_tool() {
-	if ! is_package_installed scooter; then
-		echo -e "\n${GREEN}Installing Scooter (search and replace tool)...${NO_COLOR}"
-
-		local error
-
-		error=$(cargo install scooter --locked 2>&1) || {
-			echo -e "\n\t${RED}Scooter installation failed:${NO_COLOR} ${error}"
-		}
-	fi
-}
-
-function install_gitui() {
-	if ! is_package_installed gitui; then
-		echo -e "\n${GREEN}Installing gitui...${NO_COLOR}"
-
-		local error
-
-		if ! is_package_installed cmake; then
-			echo -e "\n\t${GREEN}Installing CMake dependency...${NO_COLOR}"
-
-			error=$(sudo $package_manager install -y cmake 2>&1) || {
-				echo -e "\n\t${RED}CMake installation failed:${NO_COLOR} ${error}"
-			}
-		fi
-
-		error=$(cargo install gitui --locked 2>&1) || {
-			echo -e "\n\t${RED}gitui installation failed:${NO_COLOR} ${error}"
-		}
-	fi
-}
-
-function install_rust_toolchain() {
-	if ! is_package_installed rustup; then
-		echo -e "\n${GREEN}Installing Rust toolchain...${NO_COLOR}"
-
-		local error
-
-		error=$(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y 2>&1) || {
-			echo -e "\n\t${RED}Rust toolchain installation failed:${NO_COLOR} ${error}"
-		}
-
-		rustup update
-	fi
-}
-
 detect_installed_package_manager
 install_git
 install_font
@@ -442,6 +267,5 @@ install_trash_cli
 install_alacritty
 install_tealdeer
 install_fish_shell
-install_helix_editor
 
 echo -e "\n${YELLOW}Post-installation manual steps:${NO_COLOR}${postinstall_manual_steps}"
