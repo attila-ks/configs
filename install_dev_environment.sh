@@ -255,6 +255,18 @@ function install_tealdeer() {
 	fi
 }
 
+function install_zed_editor() {
+    if ! is_package_installed zed; then
+		echo -e "\n${GREEN}Installing Zed editor...${NO_COLOR}"
+
+		local error
+
+		error=$(curl -f https://zed.dev/install.sh | sh 2>&1) || {
+			echo -e "\n\t${RED}Zed editor installation failed:${NO_COLOR} ${error}"
+		}
+	fi
+}
+
 detect_installed_package_manager
 install_git
 install_font
@@ -266,6 +278,7 @@ install_fzf
 install_trash_cli
 install_alacritty
 install_tealdeer
+install_zed_editor
 install_fish_shell
 
 echo -e "\n${YELLOW}Post-installation manual steps:${NO_COLOR}${postinstall_manual_steps}"
