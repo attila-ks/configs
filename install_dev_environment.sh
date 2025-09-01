@@ -126,6 +126,18 @@ function install_helix_editor() {
 
 		local error
 
+		if [ ! -d /home/"$USER"/src ]; then
+			mkdir /home/"$USER"/src
+		fi
+
+		git clone https://github.com/helix-editor/helix /home/"$USER"/src/
+		cd /home/"$USER"/src/helix
+		cargo install --path helix-term --locked
+		sudo cp -r runtime ~/.config/helix/
+		sudo cp target/release/hx /usr/local/bin/
+		cd -
+		# TODO: Delete the cloned repo!
+
 		error=$(sudo $package_manager install -y helix 2>&1) || {
 			echo -e "\n\t${RED}Helix installation failed:${NO_COLOR} ${error}"
 		}
