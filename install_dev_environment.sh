@@ -312,6 +312,18 @@ function install_tealdeer() {
 	fi
 }
 
+function install_diff_tool() {
+	if ! is_package_installed difft; then
+		echo -e "\n${GREEN}Installing Difftastic...${NO_COLOR}"
+
+		local error
+
+		error=$(sudo $package_manager install -y difftastic 2>&1) || {
+			echo -e "\n\t${RED}Difftastic installation failed:${NO_COLOR} ${error}"
+		}
+	fi
+}
+
 function install_glow() {
 	if ! is_package_installed glow; then
 		echo -e "\n${GREEN}Installing Glow markdown reader...${NO_COLOR}"
@@ -453,6 +465,7 @@ install_fzf
 install_trash_cli
 install_alacritty
 install_tealdeer
+install_diff_tool
 install_fish_shell
 install_helix_editor
 
