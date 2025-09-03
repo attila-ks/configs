@@ -420,24 +420,28 @@ function install_search_and_replace_tool() {
 	fi
 }
 
-function install_gitui() {
-	if ! is_package_installed gitui; then
-		echo -e "\n${GREEN}Installing gitui...${NO_COLOR}"
+function install_lazygit() {
+	if ! is_package_installed lazygit; then
+		echo -e "\n${GREEN}Installing Lazygit...${NO_COLOR}"
 
 		local error
 
-		if ! is_package_installed cmake; then
-			echo -e "\n\t${GREEN}Installing CMake dependency...${NO_COLOR}"
-
-			error=$(sudo $package_manager install -y cmake 2>&1) || {
-				echo -e "\n\t${RED}CMake installation failed:${NO_COLOR} ${error}"
+		if [ $package_manager = "dnf" ]; then
+			error=$(sudo dnf copr enable dejan/lazygit 2>&1) || {
+				echo -e "\n\t${RED}Error during installing Lazygit:${NO_COLOR} ${error}"
 			}
 		fi
 
-		error=$(cargo install gitui --locked 2>&1) || {
-			echo -e "\n\t${RED}gitui installation failed:${NO_COLOR} ${error}"
+		error=$(sudo $package_manager install -y lazygit 2>&1) || {
+			echo -e "\n\t${RED}Lazygit installation failed:${NO_COLOR} ${error}"
 		}
 	fi
+
+	if [ -e /home/"$USER"/.config/lazygit/config.yml ]; then
+		rm /home/"$USER"/.config/lazygit/config.yml
+	fi
+
+	ln -s "$(pwd)"/lazygit/config.yml /home/"$USER"/.config/lazygit/
 }
 
 function install_rust_toolchain() {
