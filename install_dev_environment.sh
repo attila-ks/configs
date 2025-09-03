@@ -299,7 +299,7 @@ function install_alacritty() {
 
 function install_tealdeer() {
 	if ! is_package_installed tldr; then
-		echo -e "\n${GREEN}Installing tealdeer...${NO_COLOR}"
+		echo -e "\n${GREEN}Installing tealdeer (an alternative to man)...${NO_COLOR}"
 
 		local error
 
