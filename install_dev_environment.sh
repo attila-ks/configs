@@ -261,10 +261,14 @@ function install_zed_editor() {
 
 		local error
 
-		error=$(curl -f https://zed.dev/install.sh | sh 2>&1) || {
-			echo -e "\n\t${RED}Zed editor installation failed:${NO_COLOR} ${error}"
-		}
-	fi
+        error=$(curl -f https://zed.dev/install.sh | sh 2>&1) || {
+            echo -e "\n\t${RED}Zed editor installation failed:${NO_COLOR} ${error}"
+        }
+    fi
+
+    if [ ! -e /home/"$USER"/.config/zed/settings.json ]; then
+        ln -s "$(pwd)"/zed/settings.json /home/"$USER"/.config/zed/
+    fi
 }
 
 detect_installed_package_manager
